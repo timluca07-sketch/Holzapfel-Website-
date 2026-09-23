@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /enquiry-received/
+
+Sitemap: https://holzapfel.co.za/sitemap.xml

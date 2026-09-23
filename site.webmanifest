@@ -1,0 +1,17 @@
+{
+  "name": "Holzapfel Private Security",
+  "short_name": "Holzapfel",
+  "description": "Armed, PSIRA-registered close protection and a Mercedes-Maybach fleet in Cape Town, delivered as one service — not transport with security added on.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f3efe7",
+  "theme_color": "#f3efe7",
+  "icons": [
+    {
+      "src": "assets/icons/favicon.29402fbb.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
