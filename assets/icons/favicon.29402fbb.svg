@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Holzapfel Private Security">
+  <rect width="32" height="32" fill="#131313"/>
+  <g stroke="#b8985a" fill="none" stroke-linecap="square">
+    <path d="M7 5V27" stroke-width="2"/>
+    <path d="M25 5V27" stroke-width="2"/>
+    <path d="M7 16H25" stroke-width="2"/>
+    <path d="M7 5L25 27" stroke-width="1" opacity="0.55"/>
+  </g>
+</svg>
