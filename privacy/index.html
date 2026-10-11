@@ -33,7 +33,7 @@
 
 <link rel="preload" href="../assets/fonts/fraunces-variable.7f9d191d.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/work-sans-variable.97b33529.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/css/fonts.40deb8a7.css">
+<link rel="stylesheet" href="../assets/css/fonts.f57ee80a.css">
 <link rel="stylesheet" href="../assets/css/main.1f9d7e0d.css">
 
 
@@ -181,7 +181,7 @@
     <p>Only what you type into the enquiry form, plus the minimum needed to keep the form working:</p>
     <ul>
       <li><strong>Your enquiry</strong>: name, email address, and optionally a telephone number, the dates and route of your visit, the service you are interested in, and anything else you write in the message field.</li>
-      <li><strong>Technical data</strong>: your IP address and the time of submission, held transiently by our enquiry service purely to enforce rate limits and reject automated abuse.</li>
+      <li><strong>Technical data</strong>: when you send the form, our form delivery service receives your IP address and the time of submission, which it uses to deliver your message and to block automated abuse.</li>
     </ul>
     <p>
       This website sets <strong>no cookies</strong>, runs <strong>no analytics</strong>,
@@ -203,11 +203,14 @@
 
     <h2>Who sees it</h2>
     <p>
-      Your enquiry is delivered by email to our reservations team. The email is
-      handled by our mail provider, [name your SMTP or email provider], acting as
-      an operator/processor on our behalf. Depending on that provider, your
-      information may be processed outside South Africa or the EEA; where it is,
-      transfers are made under the safeguards that provider offers.
+      When you press Send, your enquiry is transmitted to Web3Forms, a form
+      delivery service operated from India, which forwards it by email to our
+      mailbox. Our email is hosted by Airpark in South Africa. Both act as
+      operators (processors) on our behalf. Web3Forms works with providers such
+      as Amazon Web Services and Cloudflare and may process your information
+      outside South Africa or the EEA; where it does, transfers are covered by
+      its data processing agreement, including the EU Standard Contractual
+      Clauses.
     </p>
     <p>
       We do not sell, rent or share your information with anyone else, and we do
@@ -218,14 +221,13 @@
     <h2>How long we keep it</h2>
     <p>
       Enquiries that do not become bookings are deleted within
-      [12 months]. Where you become a client, records are kept for as long as
+      12 months. Where you become a client, records are kept for as long as
       required by South African tax and company law, ordinarily five years from
       the end of the relevant tax period.
     </p>
     <p>
-      Rate limiting records are held in memory by the enquiry service and are
-      discarded within [24 hours] or when the service restarts, whichever is
-      sooner. They are never combined with the content of your enquiry.
+      Web3Forms keeps a copy of each submission for a limited period under its
+      own retention policy, currently 30 days on our plan, and then deletes it.
     </p>
 
     <h2>Your rights</h2>
@@ -245,15 +247,14 @@
 
     <h2>Security</h2>
     <p>
-      The site and the enquiry service are served over HTTPS only. The enquiry
-      service validates and rate limits every submission, and does not write your
-      enquiry to a database. It is relayed to our mailbox and not retained by
-      the service itself.
+      The site is served over HTTPS only, and the enquiry form is sent to
+      Web3Forms over an encrypted connection. Your enquiry is not stored on
+      this website.
     </p>
 
     <h2>Changes</h2>
     <p>
-      This notice was last updated on 2026-[MM]-[DD]. Material
+      This notice was last updated on 11 October 2026. Material
       changes will be published on this page.
     </p>
 
@@ -296,6 +297,6 @@
 </footer>
 
 
-<script src="../assets/js/main.b9785812.js" defer></script>
+<script src="../assets/js/main.b4239de6.js" defer></script>
 </body>
 </html>

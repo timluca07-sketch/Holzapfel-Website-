@@ -33,7 +33,7 @@
 
 <link rel="preload" href="../../assets/fonts/fraunces-variable.7f9d191d.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../../assets/fonts/work-sans-variable.97b33529.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../../assets/css/fonts.40deb8a7.css">
+<link rel="stylesheet" href="../../assets/css/fonts.f57ee80a.css">
 <link rel="stylesheet" href="../../assets/css/main.1f9d7e0d.css">
 
 
@@ -171,10 +171,19 @@
 
 
     <form class="form" id="enquiryForm"
-          action="https://holzapfel.co.za/api/enquiry"
+          action="https://api.web3forms.com/submit"
           method="post"
           data-success-url="../../enquiry-received/index.html"
-          data-fallback-email="tim@holzapfel.co.za">
+          data-fallback-email="tim@holzapfel.co.za"
+          data-fallback-whatsapp="https://wa.me/27786541161">
+
+      <!-- Delivery: Web3Forms (web3forms.com) emails every enquiry to tim@holzapfel.co.za.
+           The access key only allows sending to that inbox, so it is meant to be public.
+           "redirect" is used only when JavaScript is off. -->
+      <input type="hidden" name="access_key" value="2b0945b6-d0c9-4842-95dd-a999b44468d6">
+      <input type="hidden" name="subject" value="New website enquiry: Chauffeur Service">
+      <input type="hidden" name="from_name" value="Holzapfel website">
+      <input type="hidden" name="redirect" value="https://holzapfel.co.za/enquiry-received/">
 
       <input type="hidden" name="source" value="website">
       <input type="hidden" name="enquiry_type" value="Chauffeur Service">
@@ -381,6 +390,6 @@
 </footer>
 
 
-<script src="../../assets/js/main.b9785812.js" defer></script>
+<script src="../../assets/js/main.b4239de6.js" defer></script>
 </body>
 </html>
