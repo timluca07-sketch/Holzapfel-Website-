@@ -33,7 +33,7 @@
 
 <link rel="preload" href="../assets/fonts/fraunces-variable.7f9d191d.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/work-sans-variable.97b33529.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/css/fonts.8b536bc3.css">
+<link rel="stylesheet" href="../assets/css/fonts.40deb8a7.css">
 
 <!-- Marcellus + Jost: editorial system (hub pages, service detail pages,
      and the homepage's "How We Serve" section). Everything else still
@@ -42,7 +42,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Marcellus&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="../assets/css/main.81e29824.css">
+<link rel="stylesheet" href="../assets/css/main.1f9d7e0d.css">
 
 
 <script type="application/ld+json">{
@@ -92,7 +92,7 @@
     },    {
       "@type": "Offer",
       "position": 2,
-      "name": "Helicopter Transfer",
+      "name": "Meeting Helicopter Transfer",
       "description": "The skyline route, above the traffic, escorted from the pad.",
       "priceCurrency": "ZAR",
       "url": "https://holzapfel.co.za/services/helicopter-transfer/"
@@ -140,57 +140,56 @@
 <header class="nav is-solid" id="siteNav">
   <div class="nav__inner">
     <details class="nav__menu">
-      <summary class="nav__menu-trigger" aria-label="Menu">
-        <span class="nav__menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      <summary class="nav__menu-trigger" aria-label="Menu" aria-controls="menuPanel">
+        <span class="nav__menu-icon" aria-hidden="true"><span></span><span></span></span>
         <span class="nav__menu-label" data-label-open="Close">Menu</span>
       </summary>
-      <div class="nav__menu-panel">
-        <nav class="nav__menu-nav" aria-label="Primary">
-          <a href="../index.html" class="nav__menu-link">Home</a>
-
-          <div class="nav__menu-group">
-            <a href="../services-rates/index.html" class="nav__menu-link">Holzapfel Private Security</a>
-            <div class="nav__menu-sublist">
-              <a href="../services/two-hour-protection/index.html" class="nav__menu-sublink">2.5 Hour Protected Transport</a>
-              <a href="../services/half-day-escort/index.html" class="nav__menu-sublink">Half Day Escort</a>
-              <a href="../services/full-day-option/index.html" class="nav__menu-sublink">Full Day Option</a>
-              <a href="../services/24-hour-watch/index.html" class="nav__menu-sublink">24 Hour Watch</a>
-              <a href="../services/week-day-protection/index.html" class="nav__menu-sublink">One Week · Day Protection</a>
-              <a href="../services/week-day-night-protection/index.html" class="nav__menu-sublink">One Week · Day &amp; Night Protection</a>
-            </div>
-          </div>
-
-          <div class="nav__menu-group">
-            <a href="../chauffeur-service/index.html" class="nav__menu-link is-active" aria-current="page">Holzapfel Chauffeur Service</a>
-            <div class="nav__menu-sublist">
-              <a href="../services/airport-transfer/index.html" class="nav__menu-sublink">Airport Transfer</a>
-              <a href="../services/helicopter-transfer/index.html" class="nav__menu-sublink">Helicopter Transfer</a>
-              <a href="../services/city-transfer/index.html" class="nav__menu-sublink">City Transfer</a>
-            </div>
-          </div>
-
-          <a href="../enquire/chauffeur/index.html" class="nav__menu-link">Enquire</a>
-        </nav>
-
-        <div class="nav__menu-aside">
-          <span class="eyebrow">Get In Touch</span>
-          <a class="nav__menu-aside-item" href="tel:+27786541161">+27 78 654 1161</a>
-          <a class="nav__menu-aside-item nav__menu-aside-item--sub" href="https://wa.me/27786541161" rel="noopener noreferrer">Message on WhatsApp</a>
-          <a class="nav__menu-aside-item" href="mailto:tim@holzapfel.co.za">tim@holzapfel.co.za</a>
-        </div>
-
-        <div class="nav__menu-panel-foot">
-          <span class="eyebrow">Cape Town · By Introduction</span>
-        </div>
-      </div>
     </details>
+    <div class="nav__menu-panel" id="menuPanel">
+      <nav class="nav__menu-nav" aria-label="Primary">
+        <a href="../index.html" class="nav__menu-link">Home</a>
+
+        <div class="nav__menu-group">
+          <a href="../services-rates/index.html" class="nav__menu-link">Holzapfel Private Security</a>
+          <div class="nav__menu-sublist">
+            <a href="../services/two-hour-protection/index.html" class="nav__menu-sublink">2.5 Hours</a>
+            <a href="../services/half-day-escort/index.html" class="nav__menu-sublink">6 Hours</a>
+            <a href="../services/full-day-option/index.html" class="nav__menu-sublink">12 Hours</a>
+            <a href="../services/24-hour-watch/index.html" class="nav__menu-sublink">24 Hours</a>
+            <a href="../services/week-day-protection/index.html" class="nav__menu-sublink">1 Week</a>
+            <a href="../services/week-day-night-protection/index.html" class="nav__menu-sublink">1 Week D&amp;N</a>
+          </div>
+        </div>
+
+        <div class="nav__menu-group">
+          <a href="../chauffeur-service/index.html" class="nav__menu-link is-active" aria-current="page">Holzapfel Chauffeur Service</a>
+          <div class="nav__menu-sublist">
+            <a href="../services/airport-transfer/index.html" class="nav__menu-sublink">Airport Transfer</a>
+            <a href="../services/helicopter-transfer/index.html" class="nav__menu-sublink">Meeting Helicopter Transfer</a>
+            <a href="../services/city-transfer/index.html" class="nav__menu-sublink">City Transfer</a>
+          </div>
+        </div>
+
+        <a href="../enquire/chauffeur/index.html" class="nav__menu-link">Enquire</a>
+      </nav>
+
+      <div class="nav__menu-aside">
+        <span class="eyebrow">Get In Touch</span>
+        <a class="nav__menu-aside-item" href="tel:+27786541161">+27 78 654 1161</a>
+        <a class="nav__menu-aside-item nav__menu-aside-item--sub" href="https://wa.me/27786541161" rel="noopener noreferrer">Message on WhatsApp</a>
+        <a class="nav__menu-aside-item" href="mailto:tim@holzapfel.co.za">tim@holzapfel.co.za</a>
+      </div>
+
+      <div class="nav__menu-panel-foot">
+        <span class="eyebrow">Cape Town · By Introduction</span>
+      </div>
+    </div>
 
     <a href="../index.html" class="wordmark wordmark--nav nav__logo" aria-label="The Holzapfel Group homepage">
       <svg class="wordmark__mark" viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false">
         <path d="M6 4V28" stroke="currentColor" stroke-width="1.4"/>
         <path d="M26 4V28" stroke="currentColor" stroke-width="1.4"/>
         <path d="M6 16H26" stroke="currentColor" stroke-width="1.4"/>
-        <path d="M6 4L26 28" stroke="currentColor" stroke-width="0.8" opacity="0.55"/>
       </svg>
       <span class="wordmark__text">
         <span class="wordmark__line1">HOLZAPFEL</span>
@@ -232,7 +231,7 @@
   <div class="wrap">
     <span class="ed-eyebrow">Holzapfel Chauffeur Service</span>
     <h1>Every route. One standard.</h1>
-    <p class="ed-hub-hero__sub">Airport, city, or by air, the same armed, PSIRA registered chauffeur, in a Mercedes-Maybach GLS 600 or Mercedes V-Class, from the moment you land to the moment you arrive.</p>
+    <p class="ed-hub-hero__sub">Airport, city, or by air, the same armed, PSIRA registered chauffeur, in a Mercedes-Maybach GLS 600, from the moment you land to the moment you arrive.</p>
   </div>
 </section>
 
@@ -245,7 +244,7 @@
     <div class="ed-vehicle__head" data-reveal>
       <span class="ed-eyebrow">How It Works</span>
       <h2>One standard. Three routes.</h2>
-      <p class="ed-body">Airport, city, or soon by air: every transfer is driven by the same armed, PSIRA registered chauffeur, in a Mercedes-Maybach GLS 600 or Mercedes V-Class, with the route checked and confirmed before you land or set off.</p>
+      <p class="ed-body">Airport, city, or soon by air: every transfer is driven by the same armed, PSIRA registered chauffeur, in a Mercedes-Maybach GLS 600, with the route checked and confirmed before you land or set off.</p>
       <p class="ed-body">What follows is simply that: three routes, one standard throughout. Choose by where you're going, not by what you'll receive.</p>
     </div>
   </div>
@@ -266,11 +265,11 @@
       <a href="../services/helicopter-transfer/index.html" class="ed-hub-card">
         <span class="ed-hub-card__index">02</span>
         <span>
-          <span class="ed-hub-card__name">Helicopter Transfer<span class="ed-hub-card__badge">Coming Soon</span></span>
+          <span class="ed-hub-card__name">Meeting Helicopter Transfer<span class="ed-hub-card__badge">On Enquiry</span></span>
           <span class="ed-hub-card__desc">The skyline route, above the traffic, escorted from the pad.</span>
         </span>
         <span class="ed-hub-card__duration">Point to point, by air</span>
-        <span class="ed-hub-card__price">Coming Soon</span>
+        <span class="ed-hub-card__price">On Enquiry</span>
       </a>
       <a href="../services/city-transfer/index.html" class="ed-hub-card">
         <span class="ed-hub-card__index">03</span>
@@ -333,6 +332,6 @@
 </footer>
 
 
-<script src="../assets/js/main.f0d5fe86.js" defer></script>
+<script src="../assets/js/main.b9785812.js" defer></script>
 </body>
 </html>

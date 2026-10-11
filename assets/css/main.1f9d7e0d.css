@@ -1,0 +1,3312 @@
+/* ==========================================================================
+   Holzapfel Private Security — main stylesheet
+
+   One stylesheet for the whole site. Organised as:
+     1. Tokens            design variables
+     2. Reset & base      element defaults
+     3. Utilities         wrap, eyebrow, buttons, links
+     4. Layout            nav, footer, skip link
+     5. Components        hero, dossier, cards, form, prose
+     6. Surface variants  .on-ink / .on-ink-soft section theming
+     7. Motion            reveal + reduced-motion
+
+   Palette: ivory-first, with dark ink sections as punctuation. The site used
+   to run entirely on a dark charcoal surface with the ivory panel reserved
+   for "Standards" and "Bespoke"; ivory is now the base surface (hero, page
+   intros, most sections), and .on-ink / .on-ink-soft (section 6) bring back
+   the original dark surface + mist/brass text pairing for alternating
+   sections and the full-screen Menu, so the site reads as a considered
+   rhythm rather than one flat tone throughout.
+
+   Accessibility note on the palette: the original brand used #8a7248 for small
+   brass text on both the dark and the ivory panels, which measures 4.05:1 and
+   4.00:1 respectively — below the WCAG 2.1 AA threshold of 4.5:1 for text under
+   18.66px. Two tokens replace it for *text*: --brass (6.79:1 on ink) and
+   --brass-on-ivory (4.92:1 on ivory). #8a7248 survives only as --brass-dim, used
+   for decorative strokes where the contrast rules do not apply. On the ivory
+   surface, small brass text uses --brass-on-ivory throughout; --brass and
+   --brass-bright remain for borders, icons and the few elements that still sit
+   on an --ink surface.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- 1. Tokens */
+:root {
+  /* Surfaces */
+  --ink: #131313;
+  --ink-soft: #1b1c1e;
+  --ink-raised: #212325;
+  --charcoal-line: #3a3d3f;
+  --ivory: #f3efe7;
+  --ivory-line: #e2dac9;
+
+  /* Text */
+  --ink-on-ivory: #1c1b19;
+  --muted-on-ivory: #5c574d;
+  --mist: #c9c7c0;
+  --mist-dim: #8f8d87;
+
+  /* Brass */
+  --brass: #b8985a;
+  --brass-bright: #d3b479;
+  --brass-dim: #8a7248;        /* decorative strokes only — not text */
+  --brass-on-ivory: #7a6440;   /* small brass text on ivory panels */
+
+  /* Feedback */
+  --danger: #e08a7c;
+  --success: #8fbf9a;
+
+  /* Type */
+  /* Three font ROLES, deliberately different typefaces: --serif (Fraunces)
+     for display/headline text, --sans (Work Sans) for body copy, --mono
+     (IBM Plex Mono) for small-caps eyebrows, nav and labels — the "Cape
+     Town — By Introduction" treatment. A brief sitewide-mono experiment
+     aliased --serif to --mono; reverted per Tim's follow-up, back to this
+     three-way pairing. */
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --sans: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", "Courier New", monospace;
+
+  /* Rhythm */
+  --wrap: 1180px;
+  --gutter: 40px;
+  --section-y: 130px;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --gutter: 24px;
+    --section-y: 88px;
+  }
+}
+
+/* ------------------------------------------------------- 2. Reset and base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Fixed header would otherwise cover in-page anchor targets. */
+  scroll-padding-top: 96px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--ivory);
+  color: var(--muted-on-ivory);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--brass-dim);
+  color: var(--ivory);
+}
+
+/*
+  A visible focus ring on every interactive element. :focus-visible keeps it
+  off for mouse users while guaranteeing it for keyboard users.
+*/
+:focus-visible {
+  outline: 2px solid var(--brass-on-ivory);
+  outline-offset: 3px;
+}
+
+/* ------------------------------------------------------------ 3. Utilities */
+.wrap {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+section {
+  padding: var(--section-y) 0;
+  position: relative;
+}
+
+.eyebrow {
+  display: block;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--brass-on-ivory);
+}
+
+.section-head {
+  max-width: 640px;
+  margin-bottom: 64px;
+}
+
+.section-head h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(28px, 4vw, 42px);
+  color: var(--ink-on-ivory);
+  margin-top: 18px;
+  line-height: 1.18;
+}
+
+.section-head p {
+  margin-top: 18px;
+  font-size: 15px;
+  color: var(--muted-on-ivory);
+}
+
+.group-head {
+  margin-bottom: 40px;
+}
+
+.group-head h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(24px, 3vw, 32px);
+  color: var(--ink-on-ivory);
+  margin-top: 10px;
+}
+
+.group-head p {
+  margin-top: 10px;
+  font-size: 14.5px;
+  color: var(--muted-on-ivory);
+  max-width: 520px;
+}
+
+.lede {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--ink-on-ivory);
+  line-height: 1.5;
+  margin-top: 22px;
+}
+
+.body-text {
+  margin-top: 24px;
+  color: var(--muted-on-ivory);
+  font-size: 15.5px;
+}
+
+.btn-primary {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--brass);
+  color: var(--brass-on-ivory);
+  padding: 16px 30px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  background: var(--brass);
+  color: var(--ink);
+}
+
+.btn-primary[disabled] {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.link-quiet {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--muted-on-ivory);
+  border-bottom: 1px solid var(--ivory-line);
+  padding-bottom: 3px;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.link-quiet:hover,
+.link-quiet:focus-visible {
+  color: var(--ink-on-ivory);
+  border-color: var(--brass);
+}
+
+.back-link {
+  /* Its own line: the "Most Requested" badge that follows on service detail
+     pages should sit beneath it, not alongside it. */
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-on-ivory);
+  transition: color 0.3s ease;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+  color: var(--ink-on-ivory);
+}
+
+/* --------------------------------------------------------------- 4. Layout */
+
+/* Skip link — first thing in the tab order, invisible until focused. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 200;
+  background: var(--brass-bright);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 12px 20px;
+}
+
+.skip-link:focus {
+  left: 12px;
+  top: 12px;
+}
+
+/* Set by main.js while the full-screen Menu panel is open, to stop the page
+   scrolling behind it. Purely a scroll lock — .nav__menu-panel's own
+   position: fixed already keeps the page visually covered either way. */
+html.has-open-menu {
+  overflow: hidden;
+}
+
+/* --- Navigation --- */
+.nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--ivory-line);
+  transition: background 0.5s ease, padding 0.5s ease, border-color 0.5s ease;
+}
+
+/*
+  .is-solid is applied by main.js past 40px of scroll, and set server-side on
+  subpages (navSolid: true) so they never render with a plain bar over
+  content. On the ivory surface the resting state is already the page colour,
+  so .is-solid only adds the blurred backdrop + tighter padding for a "pinned"
+  feel once the visitor has scrolled.
+*/
+.nav.is-solid {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--ivory-line);
+}
+
+/* The frosted surface (tint + blur) sits on a layer behind the bar's
+   content instead of on .nav itself. A backdrop-filter on .nav would make
+   the bar the containing block for the position:fixed Menu panel inside it
+   and pull that panel into the bar's composited layer, which Safari does
+   not handle reliably. Same look, without touching the panel. */
+.nav.is-solid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(243, 239, 231, 0.92);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.nav__inner {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav__logo {
+  justify-self: center;
+}
+
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  justify-self: end;
+}
+
+/* Shared reset for the two <details> triggers below (Menu, Contact). Native
+   disclosure widgets: both work with zero JavaScript, keyboard and
+   screen-reader accessible for free. main.js only adds the polish of closing
+   one when the other opens, and closing on an outside click. */
+.nav__menu,
+.nav__contact {
+  position: relative;
+}
+
+.nav__menu summary,
+.nav__contact summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.nav__menu summary::-webkit-details-marker,
+.nav__contact summary::-webkit-details-marker {
+  display: none;
+}
+
+.nav__menu-trigger,
+.nav__contact-trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-on-ivory);
+  transition: color 0.3s ease;
+  /* Generous click and tap area (about 44px tall) without moving anything:
+     the padding enlarges the clickable box, the negative margin gives the
+     same space back, so the bar's layout stays exactly as it was. Before
+     this, only the 19px line of text itself (13px on phones) reacted. */
+  padding-block: 12px;
+  margin-block: -12px;
+}
+
+.nav__menu-trigger:hover,
+.nav__menu-trigger:focus-visible,
+.nav__contact-trigger:hover,
+.nav__contact-trigger:focus-visible {
+  color: var(--brass-on-ivory);
+}
+
+/* The trigger must float above the full-screen panel it opens (see
+   .nav__menu-panel below) so the icon it turns into stays visible and
+   clickable as the panel's close control. */
+.nav__menu-trigger {
+  position: relative;
+  z-index: 20;
+}
+
+.nav__menu-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 6.5px; /* with the 1.5px lines: exactly 8px apart, so both render equally crisp */
+  width: 20px;
+  flex-shrink: 0;
+}
+
+.nav__menu-icon span {
+  display: block;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform-origin: center;
+}
+
+/* Two lines -> close cross. The trigger keeps its normal colour in both
+   states now — the panel it opens is a sidebar that starts below the bar
+   (see .nav__menu-panel further down), so the bar itself is never covered
+   and never needs to recolour for legibility. */
+/* The lines sit 8px apart; each moves half that (4px) to meet in the
+   middle, then rotates into the cross. */
+.nav__menu[open] .nav__menu-icon span:nth-child(1) {
+  transform: translateY(4px) rotate(45deg);
+}
+
+.nav__menu[open] .nav__menu-icon span:nth-child(2) {
+  transform: translateY(-4px) rotate(-45deg);
+}
+
+.nav__menu-label {
+  font-size: 12px;
+}
+
+.nav__menu[open] .nav__menu-label {
+  font-size: 0;
+}
+
+.nav__menu[open] .nav__menu-label::after {
+  content: attr(data-label-open);
+  font-size: 12px;
+}
+
+.nav__contact-chevron {
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.nav__contact[open] .nav__contact-chevron {
+  transform: rotate(180deg);
+}
+
+.nav__contact-panel {
+  position: absolute;
+  top: calc(100% + 16px);
+  right: 0;
+  min-width: 220px;
+  background: var(--ivory);
+  border: 1px solid var(--ivory-line);
+  box-shadow: 0 16px 36px rgba(28, 27, 25, 0.14);
+  padding: 10px;
+  z-index: 10;
+}
+
+/*
+  Menu unfolds as a fixed-width sidebar directly under the bar, not a
+  full-screen takeover, matching the reference layout Tim supplied. It stays
+  on the ordinary ivory surface (no .on-ink) since the bar is always solid.
+
+  The panel is NOT inside the <details> element any more: it is the element
+  directly after it (see the nav markup), shown by the sibling rule below
+  while the <details> is open, with main.js adding .is-open as a backup.
+  Reason: Safari 18+ hides closed <details> content with content-visibility,
+  and a position:fixed panel inside that content often stayed invisible in
+  Safari until long after the page had loaded, even though the button had
+  already switched to Close. Outside the <details>, Safari's handling of it
+  no longer touches the panel. Do not move it back inside, and do not add a
+  max-height / visibility transition to it (the earlier approach, which had
+  the same problem).
+*/
+.nav__menu-panel {
+  display: none;
+  position: fixed;
+  top: var(--nav-h, 75px);
+  left: 0;
+  width: 100%;
+  max-width: 420px;
+  max-height: calc(100vh - var(--nav-h, 75px));
+  max-height: calc(100dvh - var(--nav-h, 75px));
+  z-index: 10;
+  background: var(--ivory);
+  border-right: 1px solid var(--ivory-line);
+  box-shadow: 30px 0 60px rgba(19, 19, 19, 0.1);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.nav__menu[open] + .nav__menu-panel,
+.nav__menu-panel.is-open {
+  display: block;
+}
+
+.nav__menu-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 28px var(--gutter) 8px;
+}
+
+.nav__menu-link {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.3;
+  color: var(--ink-on-ivory);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--ivory-line);
+  transition: color 0.25s ease;
+}
+
+.nav__menu-group .nav__menu-link {
+  border-bottom: none;
+  padding-bottom: 6px;
+}
+
+.nav__menu-link:hover,
+.nav__menu-link:focus-visible,
+.nav__menu-link.is-active {
+  color: var(--brass-on-ivory);
+}
+
+.nav__menu-group {
+  border-bottom: 1px solid var(--ivory-line);
+  padding-bottom: 14px;
+  margin-bottom: 2px;
+}
+
+.nav__menu-sublist {
+  display: flex;
+  flex-direction: column;
+  padding-left: 4px;
+  border-left: 1px solid var(--ivory-line);
+  margin-left: 2px;
+}
+
+.nav__menu-sublink {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted-on-ivory);
+  padding: 9px 0 9px 18px;
+  transition: color 0.25s ease;
+}
+
+.nav__menu-sublink:hover,
+.nav__menu-sublink:focus-visible {
+  color: var(--brass-on-ivory);
+}
+
+.nav__menu-aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 20px var(--gutter);
+}
+
+.nav__menu-aside .eyebrow {
+  margin-bottom: 4px;
+}
+
+.nav__menu-aside-item {
+  font-family: var(--serif);
+  font-size: 16px;
+  color: var(--ink-on-ivory);
+  transition: color 0.25s ease;
+}
+
+.nav__menu-aside-item--sub {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brass-on-ivory);
+  margin-top: -4px;
+}
+
+.nav__menu-aside-item:hover,
+.nav__menu-aside-item:focus-visible {
+  color: var(--brass-bright);
+}
+
+.nav__menu-panel-foot {
+  padding: 18px var(--gutter) 26px;
+  border-top: 1px solid var(--ivory-line);
+}
+
+.nav__contact-item {
+  padding: 10px 14px;
+}
+
+.nav__contact-item + .nav__contact-item {
+  border-top: 1px solid var(--ivory-line);
+}
+
+.nav__contact-item .eyebrow {
+  font-size: 10px;
+  margin-bottom: 4px;
+}
+
+.nav__contact-item a {
+  font-family: var(--serif);
+  font-size: 16px;
+  color: var(--ink-on-ivory);
+  word-break: break-word;
+}
+
+.nav__contact-item a:hover,
+.nav__contact-item a:focus-visible {
+  color: var(--brass-on-ivory);
+}
+
+.nav__contact-item .nav__contact-aside {
+  display: block;
+  margin-top: 3px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brass-on-ivory);
+}
+
+/* Solid "Enquire" pill — the one place on an ivory page that keeps the dark
+   ink surface, so it reads as the primary action against every section. */
+.nav__cta-solid {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--ink);
+  color: var(--ivory);
+  border: 1px solid var(--ink);
+  padding: 11px 22px;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.nav__cta-solid:hover,
+.nav__cta-solid:focus-visible {
+  background: var(--brass);
+  border-color: var(--brass);
+  color: var(--ink);
+}
+
+/*
+  Small screens: text labels drop first (icons stay, with aria-label carrying
+  the accessible name), then spacing tightens. The menu and contact panels
+  remain reachable by keyboard and touch throughout — nothing is ever removed,
+  only relabelled.
+*/
+@media (max-width: 620px) {
+  .nav {
+    padding: 16px 0;
+  }
+
+  .nav__actions {
+    gap: 10px;
+  }
+
+  .nav__menu-label,
+  .nav__contact-label {
+    display: none;
+  }
+
+  .nav__menu-trigger,
+  .nav__contact-trigger {
+    padding-block: 18px;
+    margin-block: -18px;
+  }
+
+  .nav__contact-trigger {
+    padding-inline: 8px;
+    margin-inline: -8px;
+  }
+
+  .nav__cta-solid {
+    padding: 9px 16px;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+
+  .wordmark__mark {
+    width: 22px;
+    height: 22px;
+  }
+
+  .wordmark__line1 {
+    font-size: 12px;
+    letter-spacing: 0.16em;
+  }
+
+  .wordmark__line2 {
+    font-size: 8px;
+    letter-spacing: 0.12em;
+  }
+}
+
+@media (max-width: 480px) {
+  .wordmark__line2 {
+    display: none;
+  }
+
+  .nav__inner {
+    gap: 10px;
+  }
+
+  .nav__actions {
+    gap: 8px;
+  }
+
+  .nav__contact-panel {
+    min-width: 180px;
+  }
+}
+
+@media (max-width: 360px) {
+  .nav__cta-solid {
+    padding: 8px 12px;
+  }
+
+  .nav__contact-panel {
+    right: -12px;
+  }
+}
+
+/* The wordmark is a single lockup; neither line may ever wrap. */
+.wordmark__line1,
+.wordmark__line2 {
+  white-space: nowrap;
+}
+
+/* --- Wordmark --- */
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.wordmark__mark {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  color: var(--brass);
+}
+
+.wordmark--footer .wordmark__mark {
+  color: var(--brass-dim);
+}
+
+.wordmark__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.wordmark__line1 {
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.24em;
+  color: var(--ink-on-ivory);
+}
+
+.wordmark--footer .wordmark__line1 {
+  color: var(--muted-on-ivory);
+}
+
+.wordmark__line2 {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  color: var(--brass-on-ivory);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* --- Footer --- */
+.footer {
+  padding: 56px 0 48px;
+  border-top: 1px solid var(--ivory-line);
+}
+
+.footer__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer__links {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.footer__link {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted-on-ivory);
+  transition: color 0.3s ease;
+}
+
+.footer__link:hover,
+.footer__link:focus-visible {
+  color: var(--ink-on-ivory);
+}
+
+.footer__note {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--muted-on-ivory);
+  letter-spacing: 0.02em;
+  max-width: 440px;
+}
+
+/* ----------------------------------------------------------- 5. Components */
+
+/* --- Hero ---
+   Full-bleed photo, on .on-ink (see Surface variants) so the eyebrow, title,
+   subtitle and both CTAs re-theme for a dark background automatically. The
+   gradient is hardcoded to --ink's rgb (19, 19, 19) rather than var(--ink) —
+   a var() cannot be interpolated into rgba()'s component list, and this
+   still keeps it matched to the token everywhere else on the page. */
+.hero {
+  min-height: 100vh;
+  min-height: 100svh; /* avoids the mobile URL-bar jump */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+  padding: clamp(85px, 14vh, 150px) 0 100px;
+}
+
+/*
+  The photo lives in its own .hero.on-ink rule, not the plain .hero rule
+  above, because .on-ink's own `background: var(--ink)` (Surface variants,
+  further down) is a shorthand — it resets background-image/size/position/
+  repeat to their initial values on every property it doesn't mention, so a
+  plain .hero rule would have its photo wiped out the moment .on-ink's
+  later, equally-specific rule applies. Two classes in this selector
+  (0,0,2,0) outrank .on-ink's one (0,0,1,0) regardless of source order —
+  the same technique as .nav.on-ink above.
+*/
+.hero.on-ink {
+  background-image:
+    linear-gradient(
+      115deg,
+      rgba(19, 19, 19, 0.75) 0%,
+      rgba(19, 19, 19, 0.6) 30%,
+      rgba(19, 19, 19, 0.32) 58%,
+      rgba(19, 19, 19, 0.18) 100%
+    ),
+    url("../img/hero-protection.a1c9e0f2.jpg");
+  background-size: cover;
+  background-position: 50% 22%;
+  background-repeat: no-repeat;
+}
+
+.hero__inner {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.hero .eyebrow {
+  margin-bottom: 28px;
+}
+
+.hero__title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(38px, 6vw, 74px);
+  line-height: 1.08;
+  color: var(--ink-on-ivory);
+  max-width: 850px;
+  letter-spacing: -0.01em;
+}
+
+.hero__title em {
+  font-style: italic;
+  color: var(--brass-on-ivory);
+}
+
+/* --- Statement (small brand-statement band, directly under the hero) ---
+   .statement .wrap is also the scroll-parallax handle main.js drives (see
+   the statement parallax block there) — kept separate from the per-line
+   reveal transforms below so the two motions (a one-time blur-fade entrance
+   per line, a continuous drift of the whole block) don't fight over the
+   same element's transform. */
+.statement {
+  padding: 61px 0;    /* was 72px 0 — a further 15% cut per Tim's request */
+  text-align: center;
+  overflow: hidden;
+}
+
+.statement__text {
+  max-width: 680px;
+  margin: 0 auto;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.65;
+  color: var(--ink-on-ivory);
+}
+
+.statement__line {
+  display: block;
+}
+
+/* A livelier reveal than the site-wide [data-reveal] fade-up (further down):
+   each line blurs and fades in on its own, staggered, rather than the whole
+   block translating up as one piece — modelled on the staggered-fade timing
+   Vimana Private Jets uses for its own scroll reveals. */
+.statement .statement__line[data-reveal] {
+  opacity: 0;
+  transform: none;
+  filter: blur(10px);
+  transition: opacity 0.7s ease-out, filter 0.7s ease-out;
+}
+
+.statement .statement__line[data-reveal].is-visible {
+  opacity: 1;
+  filter: blur(0);
+}
+
+.statement .statement__line[data-reveal]:nth-child(2) {
+  transition-delay: 0.18s;
+}
+
+.statement__rule {
+  display: block;
+  width: 0;
+  height: 1px;
+  margin: 28px auto 0;
+  background: var(--brass);
+  transition: width 0.9s ease-in-out 0.3s;
+}
+
+.statement__rule.is-visible {
+  width: 64px;
+}
+
+/* --- Positioning + dossier (reused on service detail pages) --- */
+.positioning {
+  background: var(--ivory);
+}
+
+.positioning--flush {
+  padding-top: 0;
+}
+
+/* --- How We Serve (homepage) ---
+   Replaces the old Positioning staircase (four-tile collage) per Tim's
+   request: four alternating image/text rows instead. Deliberately its own
+   small typographic system rather than the site's --serif/--sans/--ivory
+   tokens — Tim specified this section's colours and two fonts (Marcellus,
+   Jost) precisely, and neither font is used anywhere else on the site (see
+   the Google Fonts links in index.html's <head>). Scoped custom properties
+   keep it self-contained: nothing outside .how-we-serve reads --hws-*, and
+   .how-we-serve never touches the site-wide tokens, so it can carry its own
+   palette without shifting the colour of any other ivory surface. */
+.how-we-serve {
+  --hws-bg: #f6f5f2;
+  --hws-ink: #1c1c1a;
+  --hws-muted: #6b6a65;
+  --hws-serif: "Marcellus", "Fraunces", Georgia, serif;
+  --hws-sans: "Jost", "Work Sans", -apple-system, sans-serif;
+  background: var(--hws-bg);
+}
+
+.how-we-serve__head {
+  max-width: 640px;
+  margin: 0 auto 88px;
+  text-align: center;
+}
+
+.how-we-serve__label {
+  display: block;
+  font-family: var(--hws-serif);
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--hws-muted);
+}
+
+.how-we-serve__heading {
+  margin-top: 18px;
+  font-family: var(--hws-serif);
+  font-weight: 400;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.2;
+  color: var(--hws-ink);
+}
+
+.how-we-serve__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 96px;
+}
+
+/* Image always first in the DOM — .how-we-serve__row--reverse flips the
+   visual order to text-left/image-right on desktop via row-reverse, but at
+   the mobile breakpoint below, flex-direction switches to column for every
+   row and DOM order takes over again, so the image is always on top when
+   stacked, exactly as asked, with no separate mobile-only markup needed. */
+.how-we-serve__row {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+}
+
+.how-we-serve__row--reverse {
+  flex-direction: row-reverse;
+}
+
+.how-we-serve__media {
+  flex: 0 0 44%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  display: block;
+  background: #e8e6e0;
+}
+
+/* Round 33 briefly added `min-width: 0` here (flex items otherwise default to
+   min-width: auto, which for a loaded <img> resolves to its intrinsic width
+   and can win over flex-basis) plus a `.how-we-serve__row--compact` modifier
+   to shrink one row. Reverted in Round 34: Tim preferred the original large,
+   full-width-photo look on both rows — this is intentional sizing, not a bug
+   to fix. Do not reintroduce that constraint without checking with him first.
+   Round 35: Tim asked for the Hourly & Full-Day photo at 50% of that
+   full-intrinsic size, then asked for Airport Arrivals to match it — both
+   rows now share .how-we-serve__row--half-media below and render at the
+   same 512x640 box on desktop.
+   Round 36: the Hourly & Full-Day photo (1024x1536, ratio 0.667) doesn't
+   match this box's 4:5 (0.8) aspect-ratio, so `object-fit: cover` was
+   cropping part of it (top/bottom) to fill the box — invisible as a
+   percentage, but real. Tim asked not to lose any part of that photo, so
+   .how-we-serve__media--uncropped below switches it to `object-fit: contain`
+   for that image only: the whole photo fits inside the same 512x640 box,
+   letterboxed left/right against the box's own flat background colour
+   instead of cropped. Airport Arrivals (832x1248, same 0.667 ratio) has
+   the identical mismatch and is still being cropped by `cover` — left
+   as-is since Tim only flagged the one photo.
+   Round 37 briefly tried filling that letterbox with a blurred, scaled
+   backdrop of the same photo (a .how-we-serve__media-frame/-backdrop/-photo
+   stack). Tim asked to have the background removed again in the very next
+   message, so Round 38 reverted to the plain flat-letterbox version below.
+   Don't re-add a backdrop/blur treatment without checking with him first —
+   he's now said no to it once. */
+
+@media (min-width: 861px) {
+  .how-we-serve__row--half-media .how-we-serve__media {
+    flex-basis: 512px;
+    min-width: 0;
+    max-width: 512px;
+  }
+
+  /* Round 47: Armoured Fleet (background removed, own 1151x456 ratio) and
+     Endless Luxury (15% larger, per Tim) each need a wider box than the
+     shared 512px above — same specificity as that rule, so placing these
+     after it in source order lets them win only on the rows carrying the
+     extra modifier class. */
+  .how-we-serve__row--half-media .how-we-serve__media--wide {
+    flex-basis: 640px;
+    max-width: 640px;
+  }
+
+  .how-we-serve__row--half-media .how-we-serve__media--large {
+    flex-basis: 589px;
+    max-width: 589px;
+  }
+}
+
+.how-we-serve__media--uncropped {
+  object-fit: contain;
+  background: var(--hws-bg);
+}
+
+/* Armoured Fleet's PNG is already cropped/padded to its own 1183x462
+   ratio, not the 4:5 every other row uses, so it needs this aspect-ratio
+   at every viewport width, not just desktop — otherwise mobile would
+   still force a 4:5 box and reintroduce the dead letterbox space around
+   the car that this whole change exists to remove. */
+.how-we-serve__media--wide {
+  aspect-ratio: 1183 / 462;
+}
+
+/* Round 47 follow-up: removing Armoured Fleet's letterbox (above) also
+   removed the ~215px of incidental empty space that used to sit above the
+   car inside its old 640px-tall box — the row itself is now much shorter
+   than Armed Personnel above it, so the shared 96px row gap alone reads as
+   too tight between just those two rows. Scoped to this one row rather
+   than raising `.how-we-serve__rows` gap for every row (per the Round 34
+   lesson: fix the row that's actually flagged, not the whole section). */
+.how-we-serve__row--gap-before {
+  margin-top: 120px;
+}
+
+.how-we-serve__text {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.how-we-serve__row-label {
+  display: block;
+  font-family: var(--hws-serif);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--hws-muted);
+}
+
+.how-we-serve__row-heading {
+  margin-top: 14px;
+  font-family: var(--hws-serif);
+  font-weight: 400;
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.25;
+  color: var(--hws-ink);
+}
+
+.how-we-serve__row-body {
+  margin-top: 18px;
+  max-width: 440px;
+  font-family: var(--hws-sans);
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--hws-muted);
+}
+
+@media (max-width: 860px) {
+  .how-we-serve__head {
+    margin-bottom: 56px;
+  }
+
+  .how-we-serve__rows {
+    gap: 64px;
+  }
+
+  .how-we-serve__row--gap-before {
+    margin-top: 64px;
+  }
+
+  .how-we-serve__row,
+  .how-we-serve__row--reverse {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 28px;
+  }
+
+  .how-we-serve__media,
+  .how-we-serve__text {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+
+  .how-we-serve__row-body {
+    max-width: none;
+  }
+}
+
+.positioning__grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 80px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .positioning__grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+}
+
+/* --- Dossier (service pages: the rate/offer card beside "What's
+   Included") ---
+   Redesigned from a flat, equal-weight spec list (every field — duration,
+   distance, vehicle, price — read as the same "row") into a price-led
+   offer: the rate gets its own hero treatment up top (per the pattern
+   luxury/high-ticket service sites use — Blacklane, VistaJet — one
+   confident price anchor plus a short qualifying line, not a dense
+   table), then a short, decluttered list of the remaining specifics,
+   then the CTA. .dossier__offer holds the hero; .dossier__specs holds
+   everything else. Helicopter Transfer (pre-launch) reuses the same
+   hero slot for "Coming Soon" instead of a price — see
+   .dossier__offer-price:only-child below.
+
+   The parent section dropped .on-ink (Tim: "the whole section in white
+   ivory", Blacklane's light booking layout as reference) — .dossier no
+   longer needs to read against near-black, so every token below now
+   resolves to its plain light-surface value automatically. The one thing
+   that theme swap doesn't hand you for free: .dossier's own background
+   is the same --ivory token as .positioning's now, so a border alone
+   would leave the card sitting flush with the page behind it. The
+   box-shadow below is the same technique already used to lift
+   .nav__contact-panel / .nav__menu-panel off this identical --ivory
+   surface (see Surface variants comment) — a soft, low shadow instead of
+   a tonal shift, so the card reads as raised card, not a repaint. */
+.dossier {
+  border: 1px solid var(--ivory-line);
+  border-top: 2px solid var(--brass);
+  background: var(--ivory);
+  padding: 44px 40px 40px;
+  box-shadow: 0 28px 56px -32px rgba(19, 19, 19, 0.22);
+}
+
+.dossier__title {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  color: var(--brass-on-ivory);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.dossier__offer {
+  margin-bottom: 28px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--ivory-line);
+}
+
+.dossier__offer-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted-on-ivory);
+}
+
+.dossier__offer-price {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(32px, 3.6vw, 44px);
+  line-height: 1.1;
+  color: var(--brass-on-ivory);
+}
+
+.dossier__offer-for {
+  display: block;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--muted-on-ivory);
+}
+
+.dossier__specs {
+  list-style: none;
+  margin: 0 0 32px;
+  padding: 0;
+}
+
+.dossier__specs li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  padding: 12px 0;
+  border-top: 1px solid var(--ivory-line);
+  font-size: 14px;
+}
+
+.dossier__specs li:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.dossier__spec-k {
+  font-family: var(--mono);
+  color: var(--muted-on-ivory);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  font-size: 11.5px;
+}
+
+.dossier__spec-v {
+  color: var(--ink-on-ivory);
+  text-align: right;
+  font-weight: 500;
+}
+
+.dossier__cta {
+  margin-top: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.dossier__features {
+  margin-top: 32px;
+}
+
+.dossier__features li {
+  font-size: 13.5px;
+  color: var(--muted-on-ivory);
+  padding-left: 20px;
+  position: relative;
+  margin-bottom: 12px;
+  line-height: 1.45;
+}
+
+.dossier__features li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--brass);
+  transform: rotate(45deg);
+}
+
+/* --- Experience ---
+   A sandy/beige tone rather than the plain ivory used elsewhere, so this
+   section reads as a distinct beat in the page rhythm rather than blending
+   into Positioning above and Services below. */
+.experience {
+  background: #e4d6b8;
+}
+
+/* .img-placeholder generalises .video-placeholder's "intentional, not
+   broken" treatment (gradient tile + icon + caption) for reuse anywhere a
+   photo is still to come — the Positioning diamond and the service cards
+   below both use it, so every unfilled slot on the site reads as the same
+   deliberate motif rather than a bare empty box. */
+.experience__video,
+.video-placeholder,
+.img-placeholder {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  border: 1px solid var(--ivory-line);
+}
+
+.video-placeholder,
+.img-placeholder {
+  background: linear-gradient(135deg, var(--ivory) 0%, var(--ivory-line) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  color: var(--brass-on-ivory);
+}
+
+.video-placeholder svg,
+.img-placeholder svg {
+  width: 56px;
+  height: 56px;
+  opacity: 0.85;
+}
+
+.video-placeholder__label,
+.img-placeholder__label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted-on-ivory);
+  text-align: center;
+  padding: 0 12px;
+}
+
+/* Round 49: .img-placeholder now also knows how to hold a real photo, same
+   technique as .ed-photo (Round 16) — clip to the box and let the image
+   cover it via object-fit, rather than a second "filled" class. Works
+   unmodified inside .teaser-card's bled 16/10 crop and inside .on-ink
+   sections too, since it only touches overflow/sizing, never colour. */
+.img-placeholder { overflow: hidden; }
+.img-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Round 49: a permanent line illustration standing in for a photo not yet
+   taken (Helicopter Transfer, still Coming Soon) — not the "to come" motif
+   above, so it drops the small fixed 56px icon sizing and fills the box. */
+.img-placeholder--illustration svg {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+}
+
+.experience__cta {
+  margin-top: 56px;
+  padding: 48px 44px;
+  border: 1px solid var(--ivory-line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+  background: var(--ivory);
+}
+
+.experience__cta p {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 19px;
+  color: var(--ink-on-ivory);
+  max-width: 420px;
+  line-height: 1.4;
+}
+
+.experience__cta-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* --- Standards --- */
+.standards__grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .standards__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+.seal {
+  width: 150px;
+  height: 150px;
+  flex-shrink: 0;
+  color: var(--brass-dim);
+}
+
+.standards__item {
+  display: flex;
+  gap: 18px;
+  padding: 22px 0;
+  border-top: 1px solid var(--ivory-line);
+}
+
+.standards__item:last-child {
+  border-bottom: 1px solid var(--ivory-line);
+}
+
+.standards__mark {
+  color: var(--brass-on-ivory);
+  font-size: 18px;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+
+.standards__item h3 {
+  font-weight: 600;
+  font-size: 15.5px;
+  color: var(--ink-on-ivory);
+}
+
+.standards__item p {
+  font-size: 14px;
+  color: var(--muted-on-ivory);
+  margin-top: 4px;
+}
+
+/* --- Quote band (jet-interior photo background, directly above Process) ---
+   Same technique as .hero.on-ink further up: the background-image lives in
+   this two-class override, not the plain .quote-band rule, because .on-ink's
+   own `background` shorthand would otherwise wipe it out. */
+.quote-band {
+  padding: 120px 0;
+  text-align: center;
+}
+
+.quote-band.on-ink {
+  background-image: linear-gradient(
+    180deg,
+    rgba(19, 19, 19, 0.82) 0%,
+    rgba(19, 19, 19, 0.6) 100%
+  ),
+  url("../img/quote-jet-interior.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.quote-band__text {
+  max-width: 720px;
+  margin: 0 auto;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(24px, 3.4vw, 36px);
+  line-height: 1.4;
+  color: var(--ink-on-ivory);
+}
+
+.quote-band__cite {
+  display: block;
+  margin-top: 22px;
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: var(--muted-on-ivory);
+}
+
+@media (max-width: 640px) {
+  .quote-band {
+    padding: 90px 0;
+  }
+}
+
+/* --- Process ---
+   Three columns spanning the full section width, with a horizontal rule
+   linking the discs left to right — replaced the narrow 640px single-column
+   timeline so the section fills the width instead of sitting in a column
+   near the left edge. Collapses back to the original vertical timeline
+   (stacked, connecting line running top to bottom) below 780px, where three
+   side-by-side columns would get too cramped to read. */
+.process__list {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+}
+
+.process__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  position: relative;
+}
+
+/* The connecting rule between steps, drawn behind the numbered discs,
+   reaching from this disc's right edge past the column gap to the next. */
+.process__item:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 40px;
+  top: 19px;
+  width: calc(100% + 8px);
+  height: 1px;
+  background: var(--ivory-line);
+}
+
+.process__num {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--brass);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--brass-on-ivory);
+  flex-shrink: 0;
+  background: var(--ivory);
+  position: relative;
+  z-index: 1;
+}
+
+.process__text h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 21px;
+  color: var(--ink-on-ivory);
+  margin-bottom: 8px;
+}
+
+.process__text p {
+  font-size: 14.5px;
+}
+
+@media (max-width: 780px) {
+  .process__list {
+    grid-template-columns: 1fr;
+    gap: 0;
+    max-width: 640px;
+  }
+
+  .process__item {
+    flex-direction: row;
+    padding-bottom: 56px;
+  }
+
+  .process__item:last-child {
+    padding-bottom: 0;
+  }
+
+  .process__item:not(:last-child)::before {
+    left: 19px;
+    top: 44px;
+    bottom: 0;
+    width: 1px;
+    height: auto;
+  }
+
+  .process__text p {
+    max-width: 440px;
+  }
+}
+
+/* --- Contact --- */
+.contact {
+  background: var(--ivory);
+}
+
+.contact .section-head {
+  max-width: 560px;
+}
+
+.channels {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  border-top: 1px solid var(--ivory-line);
+}
+
+.channel {
+  flex: 1 1 220px;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--ivory-line);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.channel + .channel {
+  border-left: 1px solid var(--ivory-line);
+  padding-left: 32px;
+}
+
+@media (max-width: 700px) {
+  .channel + .channel {
+    border-left: none;
+    padding-left: 0;
+  }
+}
+
+.channel .eyebrow {
+  font-size: 11px;
+}
+
+.channel__val {
+  font-family: var(--serif);
+  font-size: 19px;
+  color: var(--ink-on-ivory);
+  word-break: break-word;
+}
+
+a.channel__val:hover,
+a.channel__val:focus-visible {
+  color: var(--brass-on-ivory);
+}
+
+/* An unfilled channel reads as clearly provisional rather than broken. */
+.channel__val--placeholder {
+  color: var(--muted-on-ivory);
+  font-style: italic;
+  font-family: var(--sans);
+  font-size: 14px;
+}
+
+.channel__aside {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brass-on-ivory);
+}
+
+.channel__aside:hover,
+.channel__aside:focus-visible {
+  color: var(--ink-on-ivory);
+}
+
+.contact__actions {
+  margin-top: 44px;
+}
+
+.contact-strip {
+  padding: 90px 0;
+  background: var(--ivory);
+  border-top: 1px solid var(--ivory-line);
+}
+
+.contact-strip__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.contact-strip p {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--ink-on-ivory);
+  max-width: 480px;
+}
+
+/* --- Page & detail headers --- */
+.page-header,
+.detail-header {
+  padding: 170px 0 80px;
+}
+
+.page-header--narrow {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+}
+
+.page-header h1,
+.detail-header h1 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(34px, 5vw, 58px);
+  color: var(--ink-on-ivory);
+  max-width: 760px;
+  line-height: 1.14;
+  letter-spacing: -0.01em;
+  margin-top: 20px;
+}
+
+.page-header__sub,
+.detail-header__sub {
+  margin-top: 24px;
+  max-width: 560px;
+  font-size: 16px;
+}
+
+.exclusivity-line {
+  margin-top: 36px;
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--brass-on-ivory);
+  border-top: 1px solid var(--ivory-line);
+  border-bottom: 1px solid var(--ivory-line);
+  padding: 14px 0;
+}
+
+.detail-header {
+  padding-bottom: 90px;
+}
+
+/* Video slot for each service's detail page — sits under the subhead, full
+   width of .wrap, giving the page a visual intro before What's Included /
+   Rate & Conditions. Reuses .video-placeholder (see Surface variants —
+   .experience__video / .video-placeholder / .img-placeholder — further
+   down) so an empty slot reads as the same deliberate "to come" motif as
+   every other unfilled photo/video spot on the site, not a broken box. */
+.detail-header__video {
+  margin-top: 48px;
+}
+
+.detail-header__duration {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass-on-ivory);
+  display: block;
+  margin-top: 26px;
+}
+
+.badge-inline {
+  display: inline-block;
+  margin: 18px 0 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--brass-bright);
+  padding: 6px 12px;
+}
+
+/* --- Teaser cards --- */
+.teaser-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1px;
+  background: var(--ivory-line);
+  border: 1px solid var(--ivory-line);
+}
+
+.teaser-card {
+  background: var(--ivory);
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+/* Photo slot, bled to the card's outer edges (negative margin against the
+   card's own padding above) so it reads as a proper photo-topped card
+   rather than an inset box — reuses .img-placeholder so an empty slot still
+   looks intentional. This is the fix for three plain empty boxes reading as
+   broken: the same placeholder motif used in Positioning, repeated here. */
+.teaser-card .img-placeholder {
+  aspect-ratio: 16 / 10;
+  margin: -36px -32px 24px;
+  border: none;
+  border-bottom: 1px solid var(--ivory-line);
+}
+
+@media (max-width: 640px) {
+  .teaser-card {
+    padding: 28px 24px;
+  }
+
+  .teaser-card .img-placeholder {
+    margin: -28px -24px 20px;
+  }
+}
+
+.teaser-card:hover,
+.teaser-card:focus-visible {
+  background: var(--ivory-line);
+}
+
+/* Closing cell of the hourly grid — spans every column so it reads as a
+   deliberate full-width break, not a 5th plain card. Same idea as
+   .quote-band (a photo with an italic line over it); reuses that same
+   type treatment so the two feel like one family once a real photo
+   replaces this gradient placeholder. */
+.teaser-grid__quote {
+  grid-column: 1 / -1;
+  position: relative;
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 40px;
+  text-align: center;
+  background: linear-gradient(135deg, var(--ivory) 0%, var(--ivory-line) 100%);
+}
+
+.teaser-grid__quote-label {
+  position: absolute;
+  top: 24px;
+  left: 32px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted-on-ivory);
+}
+
+.teaser-grid__quote-text {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(20px, 2.6vw, 28px);
+  line-height: 1.4;
+  color: var(--ink-on-ivory);
+  max-width: 640px;
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .teaser-grid__quote {
+    min-height: 0;
+    padding: 44px 24px 28px;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .teaser-grid__quote-label {
+    position: static;
+  }
+}
+
+.teaser-card:hover .teaser-card__arrow,
+.teaser-card:focus-visible .teaser-card__arrow {
+  color: var(--brass-on-ivory);
+  transform: translateX(4px);
+}
+
+.teaser-card__badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--brass-bright);
+  padding: 6px 12px;
+}
+
+.teaser-card__duration {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass-on-ivory);
+}
+
+.teaser-card h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 23px;
+  color: var(--ink-on-ivory);
+  margin-top: 12px;
+  line-height: 1.2;
+}
+
+.teaser-card p {
+  font-size: 14px;
+  margin-top: 12px;
+  flex-grow: 1;
+}
+
+.teaser-card__arrow {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--ivory-line);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-on-ivory);
+  transition: color 0.3s ease, transform 0.3s ease;
+  display: inline-block;
+}
+
+/* --- Bespoke cards --- */
+.bespoke-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--ivory-line);
+  border: 1px solid var(--ivory-line);
+}
+
+@media (max-width: 700px) {
+  .bespoke-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bespoke-card {
+  background: var(--ivory);
+  padding: 36px 34px;
+}
+
+.bespoke-card h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 21px;
+  color: var(--ink-on-ivory);
+}
+
+.bespoke-card p {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--muted-on-ivory);
+}
+
+.by-enquiry {
+  display: inline-block;
+  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brass-on-ivory);
+  border-bottom: 1px solid var(--brass-on-ivory);
+  padding-bottom: 2px;
+}
+
+.by-enquiry:hover,
+.by-enquiry:focus-visible {
+  color: var(--ink-on-ivory);
+  border-color: var(--ink-on-ivory);
+}
+
+/* --- Enquiry form --- */
+.enquiry__grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 80px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .enquiry__grid {
+    grid-template-columns: 1fr;
+    gap: 56px;
+  }
+}
+
+.form {
+  border: 1px solid var(--ivory-line);
+  background: var(--ivory);
+  padding: 40px;
+}
+
+@media (max-width: 640px) {
+  .form {
+    padding: 28px 22px;
+  }
+}
+
+/* -- named groups within a form (e.g. "Personal Information") ----------- */
+.form__section {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brass-on-ivory);
+  border-top: 1px solid var(--ivory-line);
+  padding-top: 28px;
+  margin-top: 8px;
+  margin-bottom: 22px;
+}
+
+/* :first-of-type, not :first-child — hidden inputs and the honeypot div
+   precede it in the DOM, so :first-child never matches (see the identical
+   fix on .ed-vehicle__head .ed-body, Round 21). */
+.form__section:first-of-type {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.form__row {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.form__row--check {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.form__label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted-on-ivory);
+  margin-bottom: 10px;
+}
+
+.form__label--inline {
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  color: var(--muted-on-ivory);
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+.form__label--inline a {
+  color: var(--brass-on-ivory);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.form__req {
+  color: var(--brass-on-ivory);
+}
+
+.form__input {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid var(--ivory-line);
+  border-radius: 2px;
+  color: var(--ink-on-ivory);
+  padding: 13px 14px;
+  font-size: 15px;
+  transition: border-color 0.25s ease;
+}
+
+.form__input::placeholder {
+  color: var(--mist-dim);
+}
+
+.form__input:hover {
+  border-color: var(--brass-dim);
+}
+
+.form__input:focus-visible {
+  border-color: var(--brass);
+}
+
+.form__input--area {
+  resize: vertical;
+  min-height: 130px;
+  font-family: var(--sans);
+  line-height: 1.55;
+}
+
+/*
+  Native validation styling, but only once the field has been interacted with —
+  :user-invalid avoids shouting at someone who has not typed anything yet.
+  Browsers without :user-invalid simply get no red border, which is a safe
+  degradation because the API validates regardless.
+*/
+.form__input:user-invalid {
+  border-color: var(--danger);
+}
+
+.form__check {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--brass);
+  flex-shrink: 0;
+}
+
+.form__hint {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted-on-ivory);
+}
+
+/* -- paired fields (e.g. large/small luggage) — two .form__field halves -- */
+.form__row--pair {
+  display: flex;
+  gap: 16px;
+}
+
+.form__row--pair .form__field {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 480px) {
+  .form__row--pair {
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+
+/* -- stacked checkboxes (e.g. additional requirements) ------------------- */
+.form__check-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.form__check-group .form__row--check {
+  margin-top: 0;
+}
+
+/* -- inline "i" info disclosure next to a checkbox label (e.g. Extreme
+   Protection) — a native <details>/<summary>, same pattern as .nav__contact,
+   so it needs no JavaScript and closes on outside interaction for free.
+   line-height/font-size: 0 removes the inherited body line box that was
+   inflating this <details> element's own height beyond its 17px trigger,
+   which is what pushed the "i" circle below the label text (Round 50). */
+.form__info {
+  position: relative;
+  margin-left: 2px;
+  align-self: center;
+  line-height: 0;
+  font-size: 0;
+}
+
+.form__info-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  margin-top: 1px;
+  border: 1px solid var(--brass);
+  border-radius: 50%;
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1;
+  color: var(--brass-on-ivory);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.form__info-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.form__info-trigger:hover,
+.form__info-trigger:focus-visible {
+  background: var(--brass);
+  color: var(--ink);
+}
+
+.form__info-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  z-index: 10;
+  width: 260px;
+  max-width: 78vw;
+  background: var(--ivory);
+  border: 1px solid var(--ivory-line);
+  box-shadow: 0 16px 36px rgba(28, 27, 25, 0.14);
+  padding: 14px 16px;
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--muted-on-ivory);
+}
+
+.form__submit {
+  margin-top: 32px;
+}
+
+.form__status {
+  margin-top: 20px;
+  font-size: 14.5px;
+  min-height: 1.5em;
+}
+
+.form__status--error {
+  color: var(--danger);
+}
+
+.form__status--success {
+  color: var(--success);
+}
+
+/*
+  Honeypot. Removed from the layout and from the accessibility tree, but not
+  via display:none — some bots specifically skip display:none fields.
+*/
+.form__trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.enquiry__aside .channels {
+  border-top: none;
+}
+
+.enquiry__aside .channel {
+  flex: 1 1 100%;
+  border-left: none !important;
+  padding-left: 0 !important;
+}
+
+.enquiry__note {
+  margin-top: 28px;
+}
+
+/* --- Enquiry chooser (/enquire/) — two paths to the dedicated forms --- */
+.enquiry-choice__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--ivory-line);
+  border: 1px solid var(--ivory-line);
+}
+
+@media (max-width: 700px) {
+  .enquiry-choice__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.enquiry-choice__card {
+  background: var(--ivory);
+  padding: 44px 38px;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.3s ease;
+}
+
+.enquiry-choice__card:hover,
+.enquiry-choice__card:focus-visible {
+  background: var(--ivory-line);
+}
+
+.enquiry-choice__eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass-on-ivory);
+}
+
+.enquiry-choice__card h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 26px;
+  color: var(--ink-on-ivory);
+  margin-top: 14px;
+  line-height: 1.22;
+}
+
+.enquiry-choice__card p {
+  margin-top: 14px;
+  font-size: 14.5px;
+  color: var(--muted-on-ivory);
+  flex-grow: 1;
+}
+
+.enquiry-choice__arrow {
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--ivory-line);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-on-ivory);
+  transition: color 0.3s ease, transform 0.3s ease;
+  display: inline-block;
+}
+
+.enquiry-choice__card:hover .enquiry-choice__arrow,
+.enquiry-choice__card:focus-visible .enquiry-choice__arrow {
+  color: var(--brass-on-ivory);
+  transform: translateX(4px);
+}
+
+@media (max-width: 640px) {
+  .enquiry-choice__card {
+    padding: 32px 26px;
+  }
+}
+
+/* --- Long-form prose (privacy notice) --- */
+.prose-section {
+  padding-top: 0;
+}
+
+.prose {
+  max-width: 680px;
+}
+
+.prose h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 26px;
+  color: var(--ink-on-ivory);
+  margin-top: 48px;
+  margin-bottom: 14px;
+}
+
+.prose h2:first-child {
+  margin-top: 0;
+}
+
+.prose p {
+  margin-bottom: 16px;
+  font-size: 15.5px;
+}
+
+.prose ul {
+  list-style: disc;
+  padding-left: 22px;
+  margin-bottom: 16px;
+}
+
+.prose li {
+  margin-bottom: 10px;
+  font-size: 15.5px;
+}
+
+.prose strong {
+  color: var(--ink-on-ivory);
+  font-weight: 600;
+}
+
+.prose a {
+  color: var(--brass-on-ivory);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose__nowrap {
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------- 6. Surface variants
+   The original palette included a full "text on ink" pairing — --mist /
+   --mist-dim for body copy, --brass / --brass-bright for accents — sized for
+   when the whole site ran on the dark ink surface. The ivory-first pass left
+   those tokens unused. .on-ink and .on-ink-soft bring them back, not as a
+   second full theme but as punctuation: applied to a section (or a panel,
+   such as the full-screen Menu above), they redefine the five semantic
+   tokens nearly every component already reads from — --ink-on-ivory,
+   --muted-on-ivory, --brass-on-ivory, --ivory, --ivory-line — so headings,
+   body copy, hairlines, cards and dossiers re-theme themselves automatically.
+   No component rule needs to know which surface it happens to sit on.
+
+   Placed after Components on purpose: background is a single-class rule, so
+   source order — not specificity — is what lets it win over e.g.
+   .positioning / .contact's own `background: var(--ivory)`.
+
+   Do not apply to a section containing .form__input — its background is a
+   fixed white and its text colour would invert to near-white-on-white.
+*/
+.on-ink,
+.on-ink-soft {
+  /* Literal, not var(--ivory): this rule also reassigns --ivory itself
+     below, and custom properties resolve as one simultaneous cascade per
+     element, not top-to-bottom — a var(--ivory) reference here would pick
+     up this same rule's *new* --ivory (ink-raised), not the original. */
+  --ink-on-ivory: #f3efe7;
+  --muted-on-ivory: var(--mist);
+  --brass-on-ivory: var(--brass);
+  --ivory-line: var(--charcoal-line);
+  --ivory: var(--ink-raised);
+  color: var(--mist);
+}
+
+.on-ink {
+  background: var(--ink);
+}
+
+.on-ink-soft {
+  background: var(--ink-soft);
+}
+
+/* The enquiry page's "or reach us directly" column has no padding of its
+   own the way a full section does — give it some when it's coloured. */
+.enquiry__aside.on-ink-soft {
+  padding: 36px 34px;
+}
+
+/* --------------------------------------------------------------- 7. Motion */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/*
+  If JavaScript never runs, the IntersectionObserver never fires and every
+  [data-reveal] element would stay invisible. main.js sets .js on <html> as its
+  first action; without it the reveal styles are disabled entirely, so the page
+  renders fully. Fail open, never blank.
+*/
+html:not(.js) [data-reveal] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition: none;
+}
+
+/*
+  Both rules below need to out-specificity their own animated-state rules
+  above (.statement .statement__line[data-reveal] and .statement__rule),
+  which the general html:not(.js) [data-reveal] fallback does not — it is
+  less specific than the 2-class-plus-attribute statement-line selector, and
+  it never touches `width` at all for the rule. Left unfixed, a no-JS visitor
+  would see a permanently invisible statement and a permanently zero-width
+  rule, since nothing ever adds .is-visible without the IntersectionObserver.
+*/
+html:not(.js) .statement .statement__line[data-reveal] {
+  opacity: 1;
+  filter: none;
+}
+
+html:not(.js) .statement__rule {
+  width: 64px;
+}
+
+/* Without JavaScript the Menu/Contact <details> still open and close natively;
+   only the "close the other one" and "close on outside click" polish is lost. */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------- Printing */
+@media print {
+  .nav,
+  .contact-strip,
+  .skip-link,
+  .form__submit {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 11px;
+  }
+}
+
+/* ===========================================================================
+   EDITORIAL SYSTEM — "The Holzapfel Group" rebrand (Round 14)
+
+   A calm, Aman-style black/white/grey system for the two hub pages
+   (Holzapfel Private Security, Holzapfel Chauffeur Service) and all nine
+   service detail pages. Every rule below is scoped under `main.editorial`,
+   which is applied ONLY to <main> on those eleven pages — never to <body>,
+   <header> or <footer>, and never to the homepage. This means:
+     - nav and footer keep their existing brass/ivory styling everywhere,
+       unchanged, exactly as before this round;
+     - the homepage's <main> carries no .editorial class, so every rule here
+       is unreachable from it — the homepage is pixel-identical to before;
+     - .dossier, .positioning, .standards, .btn-primary and friends (used by
+       the OLD markup on these same pages, now replaced) are left completely
+       untouched, so nothing here can leak onto any other page either.
+   Marcellus/Jost are loaded the same way Round 13 loaded them for "How We
+   Serve" (Google Fonts <link> in <head>) — see fonts.googleapis.com note
+   there; every page using main.editorial loads that same link.
+   ===========================================================================*/
+
+:root {
+  --ed-bg: #f6f5f2;
+  --ed-panel: #ffffff;
+  --ed-ink: #1c1c1a;
+  --ed-muted: #6b6a65;
+  --ed-line: #dedad2;
+  --ed-dark: #141412;
+  --ed-dark-ink: #f3f2ee;
+  --ed-dark-muted: rgba(243, 242, 238, 0.66);
+  --ed-serif: "Marcellus", "Fraunces", Georgia, serif;
+  --ed-sans: "Jost", "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+main.editorial {
+  background: var(--ed-bg);
+  color: var(--ed-ink);
+  font-family: var(--ed-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+main.editorial .wrap { max-width: 1180px; }
+
+main.editorial section { padding: 130px 0; position: relative; }
+main.editorial section + section { border-top: 1px solid var(--ed-line); }
+main.editorial section.ed-standards + section,
+main.editorial section + section.ed-standards { border-top: none; }
+
+@media (max-width: 780px) {
+  main.editorial section { padding: 76px 0; }
+}
+
+main.editorial h1,
+main.editorial h2,
+main.editorial h3 {
+  font-family: var(--ed-serif);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: inherit;
+}
+
+main.editorial .ed-eyebrow {
+  display: block;
+  font-family: var(--ed-sans);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ed-muted);
+  margin: 0 0 22px;
+}
+
+main.editorial .ed-body {
+  font-family: var(--ed-sans);
+  font-weight: 300;
+  font-size: 16.5px;
+  line-height: 1.8;
+  color: var(--ed-ink);
+  max-width: 46em;
+}
+main.editorial .ed-body + .ed-body { margin-top: 1.15em; }
+
+main.editorial a { color: inherit; }
+
+/* -- buttons ---------------------------------------------------------- */
+main.editorial .ed-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 17px 32px;
+  border: 1px solid var(--ed-ink);
+  color: var(--ed-ink);
+  background: transparent;
+  font-family: var(--ed-sans);
+  font-size: 12.5px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+main.editorial .ed-btn:hover { background: var(--ed-ink); color: var(--ed-bg); }
+main.editorial .ed-btn--invert { border-color: rgba(243, 242, 238, 0.5); color: var(--ed-dark-ink); }
+main.editorial .ed-btn--invert:hover { background: var(--ed-dark-ink); color: var(--ed-dark); border-color: var(--ed-dark-ink); }
+
+/* -- hero (detail pages) ---------------------------------------------- */
+main.editorial .ed-hero { padding-top: 200px; padding-bottom: 100px; }
+main.editorial .ed-hero__back {
+  display: inline-block;
+  font-family: var(--ed-sans);
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  color: var(--ed-muted);
+  text-decoration: none;
+  margin-bottom: 56px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+}
+main.editorial .ed-hero__back:hover { color: var(--ed-ink); border-bottom-color: var(--ed-line); }
+main.editorial .ed-hero__badge {
+  display: inline-block;
+  font-family: var(--ed-sans);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ed-ink);
+  border: 1px solid var(--ed-line);
+  padding: 7px 16px;
+  margin: 0 0 24px;
+}
+main.editorial .ed-hero__duration {
+  display: block;
+  font-family: var(--ed-sans);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ed-muted);
+  margin: 0 0 24px;
+}
+main.editorial .ed-hero h1 {
+  font-size: clamp(2.3rem, 5vw, 4rem);
+  line-height: 1.08;
+  margin: 0 0 28px;
+  max-width: 18em;
+}
+main.editorial .ed-hero__sub {
+  font-family: var(--ed-sans);
+  font-weight: 300;
+  font-size: 18.5px;
+  line-height: 1.65;
+  color: var(--ed-muted);
+  max-width: 36em;
+  margin: 0 0 64px;
+}
+main.editorial .ed-hero__video { margin-top: 8px; }
+
+/* -- neutral photo/video placeholder (overrides the warm-ivory base) -- */
+main.editorial .video-placeholder {
+  border: 1px solid var(--ed-line);
+  background: var(--ed-panel);
+  color: var(--ed-muted);
+}
+main.editorial .video-placeholder svg { opacity: 0.55; }
+main.editorial .video-placeholder__label {
+  font-family: var(--ed-sans);
+  letter-spacing: 0.1em;
+  color: var(--ed-muted);
+}
+main.editorial .ed-photo {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  border: 1px solid var(--ed-line);
+  background: #ebe9e3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+main.editorial .ed-photo--portrait { aspect-ratio: 4 / 5; }
+main.editorial .ed-photo__label {
+  font-family: var(--ed-sans);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ed-muted);
+  padding: 0 24px;
+}
+
+/* -- included / rate two-column grid ----------------------------------- */
+main.editorial .ed-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 90px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  main.editorial .ed-grid { grid-template-columns: 1fr; gap: 56px; }
+}
+
+main.editorial .ed-features {
+  list-style: none;
+  margin: 36px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 15px;
+}
+main.editorial .ed-features li {
+  padding-left: 24px;
+  position: relative;
+  font-family: var(--ed-sans);
+  font-weight: 300;
+  font-size: 15.5px;
+  color: var(--ed-ink);
+}
+main.editorial .ed-features li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.75em;
+  width: 10px;
+  height: 1px;
+  background: var(--ed-ink);
+}
+
+main.editorial .ed-rate {
+  border: 1px solid var(--ed-line);
+  padding: 48px 40px;
+  background: var(--ed-panel);
+}
+main.editorial .ed-rate__title {
+  font-family: var(--ed-sans);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ed-muted);
+  margin: 0 0 30px;
+}
+main.editorial .ed-rate__price-row {
+  border-top: 1px solid var(--ed-line);
+  border-bottom: 1px solid var(--ed-line);
+  padding: 28px 0;
+  margin-bottom: 30px;
+}
+main.editorial .ed-rate__label {
+  display: block;
+  font-family: var(--ed-sans);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ed-muted);
+  margin-bottom: 10px;
+}
+main.editorial .ed-rate__price {
+  display: block;
+  font-family: var(--ed-serif);
+  font-size: 2.15rem;
+  color: var(--ed-ink);
+}
+main.editorial .ed-rate__for {
+  display: block;
+  font-family: var(--ed-sans);
+  font-size: 13px;
+  color: var(--ed-muted);
+  margin-top: 8px;
+}
+main.editorial .ed-rate__specs {
+  list-style: none;
+  margin: 0 0 34px;
+  padding: 0;
+  display: grid;
+  gap: 15px;
+}
+main.editorial .ed-rate__specs li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--ed-sans);
+  font-size: 14px;
+}
+main.editorial .ed-rate__specs .ed-k { color: var(--ed-muted); }
+main.editorial .ed-rate__specs .ed-v { color: var(--ed-ink); text-align: right; }
+main.editorial .ed-rate .ed-btn { width: 100%; }
+
+/* -- standards (inverted, near-black band) ------------------------------ */
+main.editorial .ed-standards { background: var(--ed-dark); color: var(--ed-dark-ink); }
+main.editorial .ed-standards .ed-eyebrow { color: var(--ed-dark-muted); }
+main.editorial .ed-standards h2 { color: var(--ed-dark-ink); max-width: 18em; }
+main.editorial .ed-standards__list {
+  list-style: none;
+  margin: 60px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 46px 64px;
+}
+@media (max-width: 780px) {
+  main.editorial .ed-standards__list { grid-template-columns: 1fr; }
+}
+main.editorial .ed-standards__mark {
+  display: block;
+  width: 18px;
+  height: 1px;
+  background: rgba(243, 242, 238, 0.5);
+  margin-bottom: 22px;
+}
+main.editorial .ed-standards__item h3 { font-size: 1.05rem; margin: 0 0 10px; color: var(--ed-dark-ink); }
+main.editorial .ed-standards__item p {
+  font-family: var(--ed-sans);
+  font-weight: 300;
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: var(--ed-dark-muted);
+  margin: 0;
+}
+
+/* -- closing contact strip ---------------------------------------------- */
+main.editorial .ed-contact { text-align: center; }
+main.editorial .ed-contact p {
+  font-family: var(--ed-serif);
+  font-size: 1.55rem;
+  line-height: 1.4;
+  margin: 0 0 40px;
+  color: var(--ed-ink);
+}
+
+/* -- hub hero ------------------------------------------------------------ */
+main.editorial .ed-hub-hero { padding-top: 210px; padding-bottom: 100px; text-align: center; }
+main.editorial .ed-hub-hero .ed-eyebrow { text-align: center; }
+main.editorial .ed-hub-hero h1 {
+  font-size: clamp(2.5rem, 6vw, 4.6rem);
+  line-height: 1.1;
+  margin: 0 auto 30px;
+  max-width: 17em;
+}
+main.editorial .ed-hub-hero__sub {
+  font-family: var(--ed-sans);
+  font-weight: 300;
+  font-size: 18.5px;
+  line-height: 1.7;
+  color: var(--ed-muted);
+  max-width: 40em;
+  margin: 0 auto;
+}
+
+/* -- hub service list ----------------------------------------------------*/
+main.editorial .ed-hub-list__head { max-width: 42em; margin: 0 0 64px; }
+main.editorial .ed-hub-list__head .ed-body { margin-top: 18px; }
+main.editorial .ed-hub-list__grid {
+  display: grid;
+  border-top: 1px solid var(--ed-line);
+}
+main.editorial .ed-hub-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: baseline;
+  gap: 28px;
+  padding: 36px 4px;
+  border-bottom: 1px solid var(--ed-line);
+  text-decoration: none;
+  color: var(--ed-ink);
+  transition: opacity 0.2s ease;
+}
+main.editorial .ed-hub-card:hover { opacity: 0.6; }
+main.editorial .ed-hub-card__index {
+  font-family: var(--ed-sans);
+  font-size: 12px;
+  color: var(--ed-muted);
+  padding-top: 0.4em;
+}
+main.editorial .ed-hub-card__name { font-family: var(--ed-serif); font-size: 1.45rem; }
+main.editorial .ed-hub-card__badge {
+  display: inline-block;
+  font-family: var(--ed-sans);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ed-muted);
+  border: 1px solid var(--ed-line);
+  padding: 3px 9px;
+  margin-left: 14px;
+  vertical-align: middle;
+  transform: translateY(-2px);
+}
+main.editorial .ed-hub-card__desc {
+  display: block;
+  font-family: var(--ed-sans);
+  font-weight: 300;
+  font-size: 14.5px;
+  color: var(--ed-muted);
+  margin-top: 8px;
+  max-width: 32em;
+}
+main.editorial .ed-hub-card__duration {
+  font-family: var(--ed-sans);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ed-muted);
+  white-space: nowrap;
+  padding-top: 0.4em;
+}
+main.editorial .ed-hub-card__price {
+  font-family: var(--ed-serif);
+  font-size: 1.15rem;
+  white-space: nowrap;
+}
+@media (max-width: 760px) {
+  main.editorial .ed-hub-card {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  main.editorial .ed-hub-card__index { display: none; }
+  main.editorial .ed-hub-card__duration { padding-top: 4px; }
+}
+
+/* ===========================================================================
+   EDITORIAL SYSTEM — fleet photography (Round 16)
+
+   Real photography of the Mercedes-Maybach GLS 600 fleet vehicle, supplied
+   by Tim. Two additions:
+     1. `.ed-photo` (defined above, previously an empty placeholder box) now
+        also knows how to hold a real <img> — it clips to its own
+        aspect-ratio box and the image fills it via object-fit: cover.
+     2. Two new components: `.ed-hub-photo` (a full-bleed cinematic band on
+        each hub page, directly under the hero copy) and `.ed-vehicle` (a new
+        section on every service detail page, between "What's Included" and
+        "Standards", that finally shows the car every rate card already
+        names).
+   ===========================================================================*/
+
+main.editorial .ed-photo { overflow: hidden; }
+main.editorial .ed-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* -- hub hero photo: full-bleed, breaks out of .wrap -------------------- */
+main.editorial .ed-hub-photo {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  aspect-ratio: 21 / 9;
+  overflow: hidden;
+  background: #ebe9e3;
+}
+main.editorial .ed-hub-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+@media (max-width: 780px) {
+  main.editorial .ed-hub-photo { aspect-ratio: 4 / 5; }
+}
+main.editorial .ed-hub-photo--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* -- vehicle section (detail pages) -------------------------------------- */
+main.editorial .ed-vehicle__head { max-width: 44em; margin: 0 0 56px; }
+main.editorial .ed-vehicle__head h2 {
+  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  margin: 0 0 22px;
+}
+main.editorial .ed-vehicle__head .ed-body:first-of-type { margin-top: 0; }
+
+main.editorial .ed-vehicle__media {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 24px;
+}
+main.editorial .ed-vehicle__main { aspect-ratio: 4 / 3; }
+main.editorial .ed-vehicle__detail { aspect-ratio: 4 / 3; }
+@media (max-width: 780px) {
+  main.editorial .ed-vehicle__media { grid-template-columns: 1fr; gap: 16px; }
+  main.editorial .ed-vehicle__main,
+  main.editorial .ed-vehicle__detail { aspect-ratio: 4 / 3; }
+}
+
+/* -- feature photo moment (single-image sections outside .ed-vehicle) ---- */
+main.editorial .ed-feature__photo { max-width: 420px; }
+
+/* ================================================================
+   8. Intro overlay — cross-to-H logo animation + entry navigator
+   (Round 53, restructured Round 54)
+   Homepage only (index.html carries the markup; no other page does).
+   A fixed, full-viewport overlay plays once per browser session, in
+   two stages:
+     1. Logo stage — a thin-lined Latin cross fades in, morphs into
+        the Holzapfel "H" wordmark, holds, then fades out.
+     2. Gate stage — crossfades in as stage 1 fades out: four gold
+        links on black (Home / Private Security / Chauffeur Service /
+        Trade). This is the real entrance navigation Tim asked for in
+        Round 54 — it does not auto-dismiss. "Home" reveals the page
+        beneath; the two live divisions navigate there directly;
+        Trade is a same-size but inert "Coming Soon" item, since it
+        has no page yet.
+   The real page is fully present and laid out in the DOM the entire
+   time — the overlay only sits on top of it — so there is no layout
+   shift and nothing is hidden from crawlers or no-JS visitors.
+
+   The morph: the cross and the H are built from the same three thin
+   rectangles (two "stems" plus one crossbar), proportioned like the
+   nav/footer wordmark's own stroke weight rather than a bold block.
+   In the cross state the two stems sit flush together, reading as
+   one solid vertical line, with the crossbar high up, in the
+   proportions of a Latin cross. In the H state the stems have moved
+   apart into the two legs of the H and the crossbar has dropped to
+   the middle. Animating x/y/width/height on the same three <rect>
+   elements gets a real morph — the line visibly splits apart —
+   without depending on browser support for true path morphing, which
+   does not handle a topology change like this one reliably.
+
+   Sequencing is pure CSS (animation-delay chains against a single 0s
+   timeline start) for the default, full-motion path, so it keeps
+   playing correctly even if JS only manages to add one class and
+   nothing else. JS (see main.js) decides once, before first paint,
+   whether to play it at all (skipped on a repeat visit within the
+   session); if it does play, JS also skips straight to the gate
+   stage under prefers-reduced-motion or on the visitor's first
+   interaction (click/key/touch), manages focus into the gate once it
+   is reachable, makes the rest of the page inert while the overlay
+   is up (so Tab can't reach content still visually covered by it),
+   and clears everything when Home is clicked. Without JavaScript,
+   `.intro-overlay` stays display:none by default — the ordinary,
+   fully-navigable page is what a no-JS visitor or crawler sees,
+   immediately, nothing gated. */
+
+.intro-overlay {
+  display: none;
+}
+
+html.intro-pending .intro-overlay {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--ink);
+}
+
+/* Locks background scroll while the overlay is up (both stages). */
+html.intro-pending {
+  overflow: hidden;
+}
+
+.intro-overlay__logo-stage,
+.intro-overlay__gate-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* -- Stage 1: logo -------------------------------------------------- */
+
+.intro-overlay__mark {
+  width: clamp(48px, 8vw, 80px);
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 0 10px rgba(211, 179, 121, 0.3));
+}
+
+@media (max-width: 480px) {
+  .intro-overlay__mark {
+    width: clamp(40px, 12vw, 60px);
+  }
+}
+
+.intro-overlay__mark rect {
+  fill: var(--ivory);
+}
+
+.intro-overlay__group {
+  transform-origin: 50% 50%;
+  opacity: 0;
+  animation: introMarkIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes introMarkIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* The three morphing pieces. The cross-state geometry below is each
+   rect's own resting (markup) value — these keyframes only need to
+   state where each one is going. All three start morphing together
+   at 0.8s and take 0.5s, eased like a considered mechanical motion
+   rather than a bouncy one. Thin (5-unit) strokes on a 100-unit
+   viewBox, matching the nav wordmark's own proportion, not a bold
+   filled block. */
+.intro-overlay__stem-left,
+.intro-overlay__stem-right,
+.intro-overlay__bar {
+  animation-duration: 0.5s;
+  animation-delay: 0.8s;
+  animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  animation-fill-mode: forwards;
+}
+
+.intro-overlay__stem-left  { animation-name: introStemLeft; }
+.intro-overlay__stem-right { animation-name: introStemRight; }
+.intro-overlay__bar        { animation-name: introBar; }
+
+@keyframes introStemLeft {
+  to { x: 20px; width: 5px; y: 14px; height: 102px; }
+}
+
+@keyframes introStemRight {
+  to { x: 75px; width: 5px; y: 14px; height: 102px; }
+}
+
+@keyframes introBar {
+  to { x: 20px; width: 60px; y: 62px; height: 5px; }
+}
+
+/* Logo stage fades out, gate stage crossfades in, on the default
+   (full-motion) timeline. Skipped entirely — straight to the instant
+   states further down — under .intro-overlay--skip-logo. */
+.intro-overlay__logo-stage {
+  animation: introLogoStageOut 0.35s ease forwards;
+  animation-delay: 1.6s;
+}
+
+@keyframes introLogoStageOut {
+  from { opacity: 1; visibility: visible; }
+  to   { opacity: 0; visibility: hidden; }
+}
+
+.intro-overlay__gate-stage {
+  opacity: 0;
+  visibility: hidden;
+  animation: introGateStageIn 0.4s ease forwards;
+  animation-delay: 1.65s;
+}
+
+@keyframes introGateStageIn {
+  from { opacity: 0; visibility: hidden; }
+  to   { opacity: 1; visibility: visible; }
+}
+
+/* Set by JS: under prefers-reduced-motion, or on the visitor's first
+   interaction during the logo stage. Jumps straight to the gate,
+   instantly, no animation. */
+.intro-overlay--skip-logo .intro-overlay__logo-stage {
+  display: none;
+}
+
+.intro-overlay--skip-logo .intro-overlay__gate-stage {
+  opacity: 1;
+  visibility: visible;
+  animation: none;
+}
+
+/* Set by JS the moment "Home" is clicked — a quick cosmetic fade
+   before html.intro-pending comes off and display:none takes over.
+   pointer-events:none so a click during this last moment reaches the
+   page underneath rather than the fading overlay. */
+.intro-overlay--leaving {
+  transition: opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* -- Stage 2: entrance navigator ------------------------------------- */
+
+.intro-gate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(22px, 4vw, 34px);
+  padding: 0 24px;
+  text-align: center;
+}
+
+.intro-gate__link {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(20px, 3vw, 30px);
+  line-height: 1.2;
+  color: var(--brass);
+  background: none;
+  border: none;
+  padding: 4px 2px;
+  margin: 0;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.intro-gate__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -4px;
+  height: 1px;
+  background: var(--brass-bright);
+  transition: right 0.3s ease;
+}
+
+.intro-gate__link:hover,
+.intro-gate__link:focus-visible {
+  color: var(--brass-bright);
+}
+
+.intro-gate__link:hover::after,
+.intro-gate__link:focus-visible::after {
+  right: 0;
+}
+
+.intro-gate__link:focus-visible {
+  outline: 2px solid var(--brass-bright);
+  outline-offset: 8px;
+}
+
+.intro-gate__link--soon {
+  cursor: default;
+  color: var(--brass-dim);
+}
+
+.intro-gate__link--soon::after {
+  display: none;
+}
+
+.intro-gate__soon-tag {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass-dim);
+  margin-top: 8px;
+}

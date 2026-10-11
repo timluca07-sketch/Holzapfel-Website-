@@ -7,6 +7,29 @@
 
 <script>document.documentElement.classList.add("js");</script>
 
+<!-- Decides, synchronously and before first paint, whether the intro
+     overlay below plays at all: once per browser session. Note this
+     does NOT check prefers-reduced-motion — the overlay's second stage
+     is the entrance navigator (Home / Private Security / Chauffeur
+     Service / Trade), which every visitor needs to get through, not
+     decorative motion; main.js reads prefers-reduced-motion itself and
+     skips straight past the animated first stage when it applies. See
+     main.1f9d7e0d.css section 8 and main.js for the rest of it. -->
+<script>
+(function () {
+  var KEY = "holzapfelIntroPlayed";
+  try {
+    if (!sessionStorage.getItem(KEY)) {
+      document.documentElement.classList.add("intro-pending");
+      sessionStorage.setItem(KEY, "1");
+    }
+  } catch (e) {
+    /* sessionStorage unavailable (private browsing, blocked storage) —
+       skip the overlay rather than risk it replaying or getting stuck. */
+  }
+})();
+</script>
+
 
 <title>The Holzapfel Group · Cape Town</title>
 <meta name="description" content="Armed, PSIRA registered close protection and a Mercedes-Maybach fleet, delivered as one seamless service in Cape Town, not transport with security added on.">
@@ -33,7 +56,7 @@
 
 <link rel="preload" href="assets/fonts/fraunces-variable.7f9d191d.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/work-sans-variable.97b33529.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/fonts.8b536bc3.css">
+<link rel="stylesheet" href="assets/css/fonts.40deb8a7.css">
 
 <!-- Marcellus + Jost: used only by the "How We Serve" section further down
      the page (see .how-we-serve in main.css) — everything else on the site
@@ -42,7 +65,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Marcellus&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="assets/css/main.81e29824.css">
+<link rel="stylesheet" href="assets/css/main.1f9d7e0d.css">
 
 
 <script type="application/ld+json">{
@@ -72,62 +95,85 @@
 </head>
 <body>
 
+<div class="intro-overlay">
+  <div class="intro-overlay__logo-stage" aria-hidden="true">
+    <svg class="intro-overlay__mark" viewBox="0 0 100 130" aria-hidden="true" focusable="false">
+      <g class="intro-overlay__group">
+        <rect class="intro-overlay__stem-left" x="45" y="10" width="5" height="110"/>
+        <rect class="intro-overlay__stem-right" x="50" y="10" width="5" height="110"/>
+        <rect class="intro-overlay__bar" x="15" y="40" width="70" height="5"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="intro-overlay__gate-stage">
+    <nav class="intro-gate" aria-label="Choose where to go">
+      <button type="button" class="intro-gate__link" data-intro-home>Home</button>
+      <a href="services-rates/index.html" class="intro-gate__link">Holzapfel Private Security</a>
+      <a href="chauffeur-service/index.html" class="intro-gate__link">Holzapfel Chauffeur Service</a>
+      <span class="intro-gate__link intro-gate__link--soon" aria-disabled="true">
+        Holzapfel Trade
+        <span class="intro-gate__soon-tag">Coming Soon</span>
+      </span>
+    </nav>
+  </div>
+</div>
+
 <a class="skip-link" href="#main">Skip to content</a>
 
 <header class="nav is-solid" id="siteNav">
   <div class="nav__inner">
     <details class="nav__menu">
-      <summary class="nav__menu-trigger" aria-label="Menu">
-        <span class="nav__menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      <summary class="nav__menu-trigger" aria-label="Menu" aria-controls="menuPanel">
+        <span class="nav__menu-icon" aria-hidden="true"><span></span><span></span></span>
         <span class="nav__menu-label" data-label-open="Close">Menu</span>
       </summary>
-      <div class="nav__menu-panel">
-        <nav class="nav__menu-nav" aria-label="Primary">
-          <a href="index.html" class="nav__menu-link is-active" aria-current="page">Home</a>
-
-          <div class="nav__menu-group">
-            <a href="services-rates/index.html" class="nav__menu-link">Holzapfel Private Security</a>
-            <div class="nav__menu-sublist">
-              <a href="services/two-hour-protection/index.html" class="nav__menu-sublink">2.5 Hour Protected Transport</a>
-              <a href="services/half-day-escort/index.html" class="nav__menu-sublink">Half Day Escort</a>
-              <a href="services/full-day-option/index.html" class="nav__menu-sublink">Full Day Option</a>
-              <a href="services/24-hour-watch/index.html" class="nav__menu-sublink">24 Hour Watch</a>
-              <a href="services/week-day-protection/index.html" class="nav__menu-sublink">One Week · Day Protection</a>
-              <a href="services/week-day-night-protection/index.html" class="nav__menu-sublink">One Week · Day &amp; Night Protection</a>
-            </div>
-          </div>
-
-          <div class="nav__menu-group">
-            <a href="chauffeur-service/index.html" class="nav__menu-link">Holzapfel Chauffeur Service</a>
-            <div class="nav__menu-sublist">
-              <a href="services/airport-transfer/index.html" class="nav__menu-sublink">Airport Transfer</a>
-              <a href="services/helicopter-transfer/index.html" class="nav__menu-sublink">Helicopter Transfer</a>
-              <a href="services/city-transfer/index.html" class="nav__menu-sublink">City Transfer</a>
-            </div>
-          </div>
-
-          <a href="enquire/index.html" class="nav__menu-link">Enquire</a>
-        </nav>
-
-        <div class="nav__menu-aside">
-          <span class="eyebrow">Get In Touch</span>
-          <a class="nav__menu-aside-item" href="tel:+27786541161">+27 78 654 1161</a>
-          <a class="nav__menu-aside-item nav__menu-aside-item--sub" href="https://wa.me/27786541161" rel="noopener noreferrer">Message on WhatsApp</a>
-          <a class="nav__menu-aside-item" href="mailto:tim@holzapfel.co.za">tim@holzapfel.co.za</a>
-        </div>
-
-        <div class="nav__menu-panel-foot">
-          <span class="eyebrow">Cape Town · By Introduction</span>
-        </div>
-      </div>
     </details>
+    <div class="nav__menu-panel" id="menuPanel">
+      <nav class="nav__menu-nav" aria-label="Primary">
+        <a href="index.html" class="nav__menu-link is-active" aria-current="page">Home</a>
+
+        <div class="nav__menu-group">
+          <a href="services-rates/index.html" class="nav__menu-link">Holzapfel Private Security</a>
+          <div class="nav__menu-sublist">
+            <a href="services/two-hour-protection/index.html" class="nav__menu-sublink">2.5 Hours</a>
+            <a href="services/half-day-escort/index.html" class="nav__menu-sublink">6 Hours</a>
+            <a href="services/full-day-option/index.html" class="nav__menu-sublink">12 Hours</a>
+            <a href="services/24-hour-watch/index.html" class="nav__menu-sublink">24 Hours</a>
+            <a href="services/week-day-protection/index.html" class="nav__menu-sublink">1 Week</a>
+            <a href="services/week-day-night-protection/index.html" class="nav__menu-sublink">1 Week D&amp;N</a>
+          </div>
+        </div>
+
+        <div class="nav__menu-group">
+          <a href="chauffeur-service/index.html" class="nav__menu-link">Holzapfel Chauffeur Service</a>
+          <div class="nav__menu-sublist">
+            <a href="services/airport-transfer/index.html" class="nav__menu-sublink">Airport Transfer</a>
+            <a href="services/helicopter-transfer/index.html" class="nav__menu-sublink">Meeting Helicopter Transfer</a>
+            <a href="services/city-transfer/index.html" class="nav__menu-sublink">City Transfer</a>
+          </div>
+        </div>
+
+        <a href="enquire/index.html" class="nav__menu-link">Enquire</a>
+      </nav>
+
+      <div class="nav__menu-aside">
+        <span class="eyebrow">Get In Touch</span>
+        <a class="nav__menu-aside-item" href="tel:+27786541161">+27 78 654 1161</a>
+        <a class="nav__menu-aside-item nav__menu-aside-item--sub" href="https://wa.me/27786541161" rel="noopener noreferrer">Message on WhatsApp</a>
+        <a class="nav__menu-aside-item" href="mailto:tim@holzapfel.co.za">tim@holzapfel.co.za</a>
+      </div>
+
+      <div class="nav__menu-panel-foot">
+        <span class="eyebrow">Cape Town · By Introduction</span>
+      </div>
+    </div>
 
     <a href="index.html" class="wordmark wordmark--nav nav__logo" aria-label="The Holzapfel Group homepage">
       <svg class="wordmark__mark" viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false">
         <path d="M6 4V28" stroke="currentColor" stroke-width="1.4"/>
         <path d="M26 4V28" stroke="currentColor" stroke-width="1.4"/>
         <path d="M6 16H26" stroke="currentColor" stroke-width="1.4"/>
-        <path d="M6 4L26 28" stroke="currentColor" stroke-width="0.8" opacity="0.55"/>
       </svg>
       <span class="wordmark__text">
         <span class="wordmark__line1">HOLZAPFEL</span>
@@ -205,7 +251,7 @@
         <div class="how-we-serve__text">
           <span class="how-we-serve__row-label">Armed Personnel</span>
           <h3 class="how-we-serve__row-heading">Trained to protect, never to alarm</h3>
-          <p class="how-we-serve__row-body">Two armed, Grade-A PSIRA registered officers accompany every protection detail as standard, briefed to read a situation long before it becomes one.</p>
+          <p class="how-we-serve__row-body">Two armed, Grade-A PSIRA registered officers accompany you every step of the way, ensuring seamless discretion and uncompromising security.</p>
         </div>
       </div>
 
@@ -269,13 +315,8 @@
 
     <div class="teaser-grid" data-reveal>
       <a href="services/airport-transfer/index.html" class="teaser-card">
-        <div class="img-placeholder" role="img" aria-label="Airport Transfer photo to be added">
-          <svg viewBox="0 0 60 60" fill="none" aria-hidden="true" focusable="false">
-            <rect x="8" y="12" width="44" height="36" rx="1" stroke="currentColor" stroke-width="1"/>
-            <circle cx="20" cy="24" r="4" stroke="currentColor" stroke-width="1"/>
-            <path d="M8 40L22 28L32 36L40 26L52 40" stroke="currentColor" stroke-width="1"/>
-          </svg>
-          <span class="img-placeholder__label">Photo to be added</span>
+        <div class="img-placeholder">
+          <img src="assets/img/airport-transfer-arrival.jpg" alt="Chauffeur and vehicle waiting on the tarmac beside a private aircraft" loading="lazy" width="736" height="981">
         </div>
         <span class="teaser-card__duration">Point to point</span>
         <h3>Airport Transfer</h3>
@@ -283,8 +324,8 @@
         <span class="teaser-card__arrow" aria-hidden="true">View details &amp; rate &rarr;</span>
       </a>
 
-      <a href="services/helicopter-transfer/index.html" class="teaser-card">
-        <div class="img-placeholder" role="img" aria-label="Helicopter Transfer photo to be added">
+      <a href="services/half-day-escort/index.html" class="teaser-card">
+        <div class="img-placeholder" role="img" aria-label="6 Hours photo to be added">
           <svg viewBox="0 0 60 60" fill="none" aria-hidden="true" focusable="false">
             <rect x="8" y="12" width="44" height="36" rx="1" stroke="currentColor" stroke-width="1"/>
             <circle cx="20" cy="24" r="4" stroke="currentColor" stroke-width="1"/>
@@ -292,24 +333,18 @@
           </svg>
           <span class="img-placeholder__label">Photo to be added</span>
         </div>
-        <span class="teaser-card__badge">Coming Soon</span>
-        <span class="teaser-card__duration">By Air</span>
-        <h3>Helicopter Transfer</h3>
-        <p>The skyline route, above the traffic, escorted from the pad.</p>
-        <span class="teaser-card__arrow" aria-hidden="true">View details &rarr;</span>
+        <span class="teaser-card__duration">6 hours</span>
+        <h3>6 Hours</h3>
+        <p>Six hours, entirely at your disposal, wherever the day leads.</p>
+        <span class="teaser-card__arrow" aria-hidden="true">View details &amp; rate &rarr;</span>
       </a>
 
       <a href="services/24-hour-watch/index.html" class="teaser-card">
-        <div class="img-placeholder" role="img" aria-label="24 Hour Watch photo to be added">
-          <svg viewBox="0 0 60 60" fill="none" aria-hidden="true" focusable="false">
-            <rect x="8" y="12" width="44" height="36" rx="1" stroke="currentColor" stroke-width="1"/>
-            <circle cx="20" cy="24" r="4" stroke="currentColor" stroke-width="1"/>
-            <path d="M8 40L22 28L32 36L40 26L52 40" stroke="currentColor" stroke-width="1"/>
-          </svg>
-          <span class="img-placeholder__label">Photo to be added</span>
+        <div class="img-placeholder">
+          <img src="assets/img/24-hour-watch-residence.jpg" alt="Private residence entrance in Cape Town" loading="lazy" width="1080" height="1350">
         </div>
         <span class="teaser-card__duration">24 hours, continuous</span>
-        <h3>24 Hour Watch</h3>
+        <h3>24 Hours</h3>
         <p>Watched through the night, so you can sleep through it.</p>
         <span class="teaser-card__arrow" aria-hidden="true">View details &amp; rate &rarr;</span>
       </a>
@@ -443,6 +478,6 @@
 </footer>
 
 
-<script src="assets/js/main.f0d5fe86.js" defer></script>
+<script src="assets/js/main.b9785812.js" defer></script>
 </body>
 </html>
